@@ -13,22 +13,22 @@ import {
 const steps = [
   {
     title: "OpenLAB Posting",
-    description: "Labs publish unbundled micro-tasks that match real research needs.",
+    description: "연구실이 실제 연구 수요에 맞춘 언번들드 마이크로 태스크를 올립니다.",
     icon: ClipboardList,
   },
   {
     title: "AI Screening",
-    description: "LLM-based agents review resumes and skills for quick matching.",
+    description: "LLM 기반 에이전트가 이력과 스킬을 분석해 빠르게 매칭합니다.",
     icon: BrainCircuit,
   },
   {
     title: "Interview",
-    description: "Short, focused interview with the project manager to align goals.",
+    description: "프로젝트 매니저와 짧고 명확한 인터뷰로 목표를 맞춥니다.",
     icon: MessageCircle,
   },
   {
     title: "Participation",
-    description: "Join the project and earn a skill-based certificate.",
+    description: "프로젝트에 참여하고 스킬 기반 인증서를 받습니다.",
     icon: BadgeCheck,
   },
 ];
@@ -36,24 +36,24 @@ const steps = [
 const projects = [
   {
     title: "Stock Prediction Transformer Model - Data Preprocessing",
-    lab: "Prof. B's Industrial Engineering Lab",
-    duration: "1 Month",
+    lab: "B 교수 산업공학 연구실",
+    duration: "1개월",
     skill: "Pandas, Python",
-    tag: "Unbundled Task",
+    tag: "언번들드 태스크",
   },
   {
     title: "Bio-Signal Classification - Feature Extraction",
-    lab: "NeuroTech Research Group",
-    duration: "3 Weeks",
+    lab: "NeuroTech 연구그룹",
+    duration: "3주",
     skill: "NumPy, Signal Processing",
-    tag: "Micro-Project",
+    tag: "마이크로 프로젝트",
   },
   {
     title: "Smart Campus Energy Forecasting - Data Labeling",
-    lab: "Urban Systems Lab",
-    duration: "2 Weeks",
+    lab: "도시 시스템 연구실",
+    duration: "2주",
     skill: "Labeling, Excel",
-    tag: "Quick Start",
+    tag: "빠른 시작",
   },
 ];
 
@@ -88,31 +88,31 @@ export default function App() {
             <div className="space-y-6">
               <p className="inline-flex items-center gap-2 rounded-full bg-slate px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-navy/70">
                 <LineChart className="h-4 w-4 text-accent" />
-                Research Built For Skills
+                스킬 중심 연구 경험
               </p>
               <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
                 OpenLAB: Unbundling of Research
               </h1>
               <p className="text-lg text-navy/70">
-                Experience graduate-level research with light commitment. Switch from
-                Degree-based to Skill-based specs.
+                가벼운 참여로 대학원급 연구를 경험하세요. 전공 중심에서 스킬 중심으로
+                전환합니다.
               </p>
               <div className="flex flex-wrap gap-4">
                 <button className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-[#1557D6]">
-                  Find a Project
+                  프로젝트 찾기
                 </button>
                 <button className="rounded-full border border-navy/20 px-6 py-3 text-sm font-semibold text-navy transition hover:-translate-y-0.5 hover:border-navy/40">
-                  Post a Lab Opening
+                  랩 오프닝 등록
                 </button>
               </div>
               <div className="flex flex-wrap gap-6 text-sm text-navy/60">
                 <div className="flex items-center gap-2">
                   <UserSquare2 className="h-4 w-4 text-accent" />
-                  Student-ready micro-tasks
+                  학생도 바로 참여 가능한 마이크로 태스크
                 </div>
                 <div className="flex items-center gap-2">
                   <BadgeCheck className="h-4 w-4 text-accent" />
-                  Skill-based certificates
+                  스킬 기반 인증서
                 </div>
               </div>
             </div>
@@ -121,19 +121,19 @@ export default function App() {
               <div className="space-y-6">
                 <div className="rounded-2xl bg-white p-6 shadow-sm">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    Live Project
+                    진행 중 프로젝트
                   </p>
                   <h3 className="mt-2 text-lg font-semibold">
                     Stock Prediction Transformer Model
                   </h3>
                   <p className="mt-2 text-sm text-navy/60">
-                    1-month data preprocessing sprint with Prof. B's lab.
+                    B 교수 연구실과 함께하는 1개월 데이터 전처리 스프린트입니다.
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-xs text-navy/60">
                     <span className="rounded-full bg-accent/10 px-3 py-1 text-accent">
-                      Unbundled Task
+                      언번들드 태스크
                     </span>
-                    <span>Python • Pandas</span>
+                    <span>Python · Pandas</span>
                   </div>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -141,13 +141,13 @@ export default function App() {
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
                       For Students
                     </p>
-                    <p className="mt-2">Try research without a year-long commitment.</p>
+                    <p className="mt-2">1년 약정 없이 연구를 경험해 볼 수 있습니다.</p>
                   </div>
                   <div className="rounded-2xl bg-white p-5 text-sm text-navy/70 shadow-sm">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
                       For Labs
                     </p>
-                    <p className="mt-2">Fill your pipeline with skilled contributors fast.</p>
+                    <p className="mt-2">숙련된 기여자를 빠르게 연결합니다.</p>
                   </div>
                 </div>
               </div>
@@ -164,13 +164,13 @@ export default function App() {
             </p>
             <h2 className="text-3xl font-semibold">Solve the Dilemma of Choice</h2>
             <p className="text-base text-navy/70">
-              Students worry about committing to the wrong major. Labs struggle with
-              labor shortages for routine research tasks.
+              학생은 전공 선택의 불확실성을, 연구실은 반복 업무의 인력 부족을 겪고
+              있습니다.
             </p>
             <div className="rounded-2xl border border-navy/10 bg-white p-5 text-sm text-navy/70 shadow-sm">
               <p className="font-semibold text-navy">The Problem</p>
               <p className="mt-2">
-                Fear of wrong major choice + lack of research support.
+                잘못된 전공 선택에 대한 두려움 + 연구 보조 인력 부족.
               </p>
             </div>
           </div>
@@ -181,18 +181,18 @@ export default function App() {
               </p>
               <h3 className="mt-2 text-2xl font-semibold">Micro-projects</h3>
               <p className="mt-2 text-sm text-navy/70">
-                Instead of a 1-year commitment, join a 1-month “Data Preprocessing”
-                task and build real research skills faster.
+                1년 약정 대신 1개월 단위의 데이터 전처리 태스크에 참여해 실제 연구
+                스킬을 더 빠르게 쌓습니다.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-2xl bg-white p-5 text-sm text-navy/70 shadow-sm">
                 <p className="font-semibold text-navy">Students</p>
-                <p className="mt-2">Experiment with labs by skill, not degree.</p>
+                <p className="mt-2">전공이 아닌 스킬 기준으로 연구실을 탐색합니다.</p>
               </div>
               <div className="rounded-2xl bg-white p-5 text-sm text-navy/70 shadow-sm">
                 <p className="font-semibold text-navy">Professors</p>
-                <p className="mt-2">Access vetted talent for foundational tasks.</p>
+                <p className="mt-2">검증된 인력을 기초 태스크에 빠르게 투입합니다.</p>
               </div>
             </div>
           </div>
@@ -208,12 +208,12 @@ export default function App() {
               </p>
               <h2 className="text-3xl font-semibold">Four steps to impact</h2>
               <p className="text-base text-navy/70">
-                A streamlined flow that keeps labs moving and students learning.
+                연구실의 진행 속도를 높이고 학생의 학습을 돕는 간결한 흐름입니다.
               </p>
             </div>
             <div className="flex items-center gap-3 text-sm text-navy/60">
               <Sparkles className="h-4 w-4 text-accent" />
-              LLM screening + quick interviews
+              LLM 스크리닝 + 빠른 인터뷰
             </div>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -247,11 +247,11 @@ export default function App() {
                 Featured Projects
               </p>
               <h2 className="text-3xl font-semibold">
-                Start with a focused micro-task
+                집중형 마이크로 태스크부터 시작하세요
               </h2>
             </div>
             <button className="inline-flex items-center gap-2 text-sm font-semibold text-accent">
-              Browse more projects
+              더 많은 프로젝트 보기
               <Sparkles className="h-4 w-4" />
             </button>
           </div>
@@ -270,11 +270,11 @@ export default function App() {
                 </div>
                 <div className="mt-6 space-y-2 text-sm text-navy/60">
                   <div className="flex items-center justify-between">
-                    <span>Duration</span>
+                    <span>기간</span>
                     <span className="font-semibold text-navy">{project.duration}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>Skill</span>
+                    <span>기술</span>
                     <span className="font-semibold text-navy">{project.skill}</span>
                   </div>
                 </div>
@@ -299,8 +299,8 @@ export default function App() {
               </div>
             </div>
             <p className="text-sm text-white/70">
-              Credentialing through verified certificates and SaaS-based screening
-              that makes research work accessible to everyone.
+              검증된 인증서와 SaaS 기반 스크리닝으로 누구나 연구에 접근할 수 있도록
+              돕습니다.
             </p>
           </div>
           <div className="grid gap-4 text-sm text-white/70 sm:grid-cols-2">
@@ -309,7 +309,7 @@ export default function App() {
               <div>
                 <p className="font-semibold text-white">Credentialing</p>
                 <p className="text-white/60">
-                  Earn certificates tied to real lab outcomes.
+                  실제 연구 성과에 연결된 인증서를 제공합니다.
                 </p>
               </div>
             </div>
@@ -318,14 +318,14 @@ export default function App() {
               <div>
                 <p className="font-semibold text-white">SaaS Screening</p>
                 <p className="text-white/60">
-                  AI-backed skill matching for faster hiring.
+                  AI 기반 스킬 매칭으로 더 빠른 채용을 지원합니다.
                 </p>
               </div>
             </div>
           </div>
         </div>
         <div className="mx-auto mt-10 flex max-w-6xl flex-col gap-2 px-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
-          <p>© {year} OpenLAB. All rights reserved.</p>
+          <p>© {year} OpenLAB. 모든 권리 보유.</p>
           <p>Light Commitment, Heavy Impact.</p>
         </div>
       </footer>
