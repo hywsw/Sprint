@@ -91,3 +91,18 @@ Assistant: OpenLAB ?? ???? ?? ?? ??? ???? ???????, ?? ?? ???? ????.
 Assistant: - `src/App.tsx`: ???/??-??/?? ??/????/?? ??? ???? ??, ?? ??? ??/?? ?? ??, ??? ???? ??, ??? ??.
 Assistant: - `src/App.tsx`: ???? ???? ???/??/??? ???? ??.
 Assistant: ??? ??? ?? `npm install`? ???? `vite` ?? ??? ????.
+
+# 2026-01-08 (추가 작업)
+Assistant: 메뉴바/라우팅/공고/로그인/회원가입/마이페이지까지 확장, UI 정렬 반복 수정.
+Assistant: - `openlab/src/components/TopNav.tsx`: 메뉴 항목 추가(마이페이지), 로그인/회원가입 배치 조정, 로고 텍스트/아이콘(별) 스타일 변경, Unbundling 문구 위치/스타일 조정.
+Assistant: - `openlab/src/pages/Notices.tsx`: 공고 게시판 페이지 추가(간단 테이블/카드형).
+Assistant: - `openlab/src/pages/Login.tsx`, `openlab/src/pages/Signup.tsx`: 일반 사용자/랩 사용자 분기 폼 UI 추가.
+Assistant: - `openlab/src/pages/MyPage.tsx`: 이력서/학력/경력/스킬 스택 관리 UI 추가.
+Assistant: - `openlab/src/pages/Home.tsx`: CTA 버튼을 라우팅 링크로 변경(`/notices`, `/post`).
+Assistant: - `openlab/src/App.tsx`: 라우트 추가(`/notices`, `/login`, `/signup`, `/mypage` 등).
+Assistant: - `openlab/src/main.tsx`: `BrowserRouter` 적용.
+Assistant: - `openlab/package.json`: `react-router-dom` 추가 및 JSON/BOM 문제 수정.
+Assistant: Vercel 빌드 오류 대응으로 `TopNav.tsx`의 미사용 아이콘 import 제거.
+Assistant: 외부 모델 레포를 `model/`로 클론하고 구조 분석 후 `model/pages` 파일명 기능별로 변경.
+Assistant: - `model/pages/*`: page1~6 → `web_crawler_query.py`, `resume_screening.py`, `document_chat.py`, `pdf_reader.py`, `data_analysis_viz.py`, `brand_archive.py`.
+Assistant: - `model_v2/modelAgents.md`: OpenLAB 이력서/공고 구조에 맞는 LLM 스크리닝 프롬프트/스키마로 재작성.
