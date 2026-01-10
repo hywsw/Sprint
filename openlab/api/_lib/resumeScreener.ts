@@ -2,55 +2,37 @@
 import fetch from "node-fetch";
 
 export async function screenResume({ jobDescription = "", criteria = "", resumeText = "" } = {}) {
-  const combined = `Job Description:\n${jobDescription}\n\nCriteria:\n${criteria}\n\nResume Text:\n${resumeText}`;
-  const apiKey = process.env.OPENAI_API_KEY;
+  // Ollama 서버 URL (환경변수 또는 기본값)
+  const ollamaUrl = process.env.OLLAMA_URL || "http://localhost:8000";
 
-  if (apiKey) {
-    try {
-      const prompt = `You are an expert resume screener. Given the job description, a numbered list of screening criteria, and the resume text, produce a JSON object with the following structure (JSON only): {
-  "criteria_decisions": [{ "criteria": string, "decision": boolean, "reasoning": string }],
-  "overall_decision": boolean,
-  "overall_reasoning": string
-}
+  try {
+    // Python FastAPI 서버 호출 (Ollama 기반)
+    const res = await fetch(`${ollamaUrl}/analyze-resume`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        job_description: jobDescription,
+        criteria: criteria,
+        resume_text: resumeText,
+      }),
+    });
 
-For each criteria item provide a short reasoning (1-2 sentences) and a boolean decision whether the resume meets that criteria. Make the overall_decision true only if the majority of criteria are met (or provide a reason otherwise).`;
-
-      const messages = [
-        { role: "system", content: "You evaluate resumes against criteria and job descriptions and return concise JSON responses." },
-        { role: "user", content: `${prompt}\n\n${combined}` },
-      ];
-
-      const res = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ model: "gpt-4o-mini", messages, max_tokens: 1400, temperature: 0 }),
-      });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`OpenAI error: ${res.status} ${txt}`);
-      }
-
-      const body = await res.json();
-      const content = body?.choices?.[0]?.message?.content ?? "";
-
-      const first = content.indexOf("{");
-      const last = content.lastIndexOf("}");
-      if (first !== -1 && last !== -1 && last > first) {
-        const jsonText = content.slice(first, last + 1);
-        try {
-          const parsed = JSON.parse(jsonText);
-          return { success: true, data: parsed };
-        } catch (e) {
-          console.error("parse error", e);
-        }
-      }
-    } catch (e) {
-      console.error("OpenAI screen error", e.message || e);
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`Ollama server error: ${res.status} ${txt}`);
     }
+
+    const body = await res.json();
+
+    if (body.success) {
+      return { success: true, data: body };
+    } else {
+      throw new Error(body.error || "Unknown error from Ollama server");
+    }
+  } catch (e) {
+    console.error("Ollama screen error", e.message || e);
   }
 
   // Fallback simple screener: for each criteria line, check substring presence and produce simple reasoning
