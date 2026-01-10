@@ -44,7 +44,14 @@ export default function App() {
         <Route path="notices/:id" element={<NoticeDetail />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="mypage" element={<MyPage />} />
+        <Route
+          path="mypage"
+          element={
+            <ProtectedRoute>
+              <MyPage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="post"
           element={

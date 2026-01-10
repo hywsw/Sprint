@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { savePostedNotice } from "../lib/openlabStore";
 
 export default function PostNotice() {
   const [title, setTitle] = useState("");
@@ -10,6 +12,7 @@ export default function PostNotice() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { auth } = useAuth();
 
   const validate = () => {
     if (!title.trim()) return "프로젝트명을 입력하세요.";
@@ -26,6 +29,13 @@ export default function PostNotice() {
       return;
     }
 
+    const ownerEmail = auth.user?.email || "";
+    const lab = auth.user?.labName || "";
+    if (!ownerEmail || !lab) {
+      setError("연구실 계정 정보가 없습니다. 다시 로그인해주세요.");
+      return;
+    }
+
     const payload = {
       id: `NL-${Date.now().toString().slice(-6)}`,
       title,
@@ -37,17 +47,36 @@ export default function PostNotice() {
       deadline: "",
     };
 
+    // Vite(5173) 단독 실행에서도 동작하도록 localStorage에 저장
+    savePostedNotice({
+      id: payload.id,
+      title: payload.title,
+      description: payload.description,
+      duration: payload.duration,
+      deadline: payload.deadline,
+      status: payload.status,
+      criteria: payload.criteria,
+      lab,
+      ownerEmail,
+      createdAt: new Date().toISOString(),
+    });
+
     try {
       const res = await fetch("/api/post-notice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("서버 에러");
+      // /api가 없는 Vite 단독 환경에서는 실패할 수 있으니 무시
+      if (!res.ok) {
+        // ignore
+      }
       setSuccess("공고가 등록되었습니다.");
       setTimeout(() => navigate(`/notices/${payload.id}`), 800);
     } catch (err: any) {
-      setError(err.message || "등록에 실패했습니다.");
+      // ignore: localStorage 저장은 이미 완료
+      setSuccess("공고가 등록되었습니다.");
+      setTimeout(() => navigate(`/notices/${payload.id}`), 800);
     }
   };
 

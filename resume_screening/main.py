@@ -33,8 +33,15 @@ app = FastAPI(title="Resume Screening Service")
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    # Vite(5173)에서 직접 호출(fetch)하기 위한 로컬 허용 목록
+    # 쿠키/세션을 쓰지 않으므로 credentials는 끕니다.
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -215,6 +222,8 @@ async def analyze_resume(
     """
     
     try:
+        logger.info(f"analyze-resume 호출 - resume: {resume is not None}, resume_text len: {len(resume_text)}, job_description len: {len(job_description)}, criteria len: {len(criteria)}")
+        
         # 이력서 텍스트 추출
         extracted_text = ""
         
@@ -229,6 +238,7 @@ async def analyze_resume(
             extracted_text = resume_text if not extracted_text else extracted_text + "\n" + resume_text
         
         if not extracted_text:
+            logger.warning("이력서 텍스트 없음")
             return JSONResponse(
                 status_code=400,
                 content={
@@ -238,6 +248,7 @@ async def analyze_resume(
             )
         
         if not job_description or not criteria:
+            logger.warning("job_description 또는 criteria 없음")
             return JSONResponse(
                 status_code=400,
                 content={
@@ -247,17 +258,18 @@ async def analyze_resume(
             )
         
         # Ollama를 사용한 평가
-        logger.info("Ollama 평가 시작")
+        logger.info("이력서 평가 시작")
         result = screen_resume_with_ollama(
             extracted_text,
             job_description,
             criteria
         )
         
+        logger.info(f"평가 결과: {json.dumps(result, ensure_ascii=False)}")
         return JSONResponse(content=result)
         
     except Exception as e:
-        logger.error(f"분석 중 오류 발생: {str(e)}")
+        logger.error(f"분석 중 오류 발생: {str(e)}", exc_info=True)
         return JSONResponse(
             status_code=500,
             content={

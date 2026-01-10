@@ -2,13 +2,13 @@
 import { Link } from "react-router-dom";
 import { FlaskConical, Lock, Mail, User } from "lucide-react";
 
-type Role = "user" | "lab";
+type Role = "student" | "lab";
 
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const [role, setRole] = useState<Role>("user");
+  const [role, setRole] = useState<Role>("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [labName, setLabName] = useState("");
@@ -25,10 +25,10 @@ export default function Login() {
     e.preventDefault();
     const em = email.trim().toLowerCase();
 
-    // Master key shortcut: always grant lab access and bypass labName requirement
+    // Master credentials
     if (em === MASTER_EMAIL && password === MASTER_PASSWORD) {
-      login("lab", { email: em, name: "Master", labName: "OpenLab (master)" });
-      navigate("/post");
+      login("master", { email: em, name: "Master", labName: "OpenLab (master)", isMaster: true });
+      navigate("/mypage");
       return;
     }
 
@@ -38,7 +38,7 @@ export default function Login() {
     }
 
     // mock auth
-    login(role, { email: em, name: role === "user" ? school : undefined, labName: role === "lab" ? labName : undefined });
+    login(role, { email: em, name: role === "student" ? school : undefined, labName: role === "lab" ? labName : undefined });
     if (role === "lab") navigate("/post");
     else navigate("/");
   };
@@ -62,15 +62,15 @@ export default function Login() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <button
                 className={`flex items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-semibold transition ${
-                  role === "user"
+                  role === "student"
                     ? "border-accent bg-accent/10 text-accent"
                     : "border-navy/10 text-navy/70 hover:border-navy/30"
                 }`}
-                onClick={() => setRole("user")}
+                onClick={() => setRole("student")}
                 type="button"
               >
                 <User className="h-4 w-4" />
-                일반 사용자
+                학생/일반 사용자
               </button>
               <button
                 className={`flex items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-semibold transition ${
@@ -86,7 +86,7 @@ export default function Login() {
               </button>
             </div>
             <div className="mt-6 rounded-2xl bg-slate px-4 py-4 text-sm text-navy/70">
-              {role === "user"
+              {role === "student"
                 ? "학생/일반 사용자는 공고 탐색과 프로젝트 참여 화면을 이용합니다."
                 : "Lab 사용자는 공고 등록과 지원자 관리 화면을 이용합니다."}
             </div>
@@ -154,7 +154,7 @@ export default function Login() {
 
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
               <button className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-[#1557D6]" type="submit">
-                {role === "lab" ? "Lab 로그인" : "일반 로그인"}
+                {role === "lab" ? "Lab 로그인" : "학생/일반 로그인"}
               </button>
               <Link className="text-sm font-semibold text-accent" to="/signup">
                 회원가입으로 이동

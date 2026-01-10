@@ -2,9 +2,13 @@
 import { Calendar, ClipboardList, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { notices } from "../data/notices";
+import { useAuth } from "../context/AuthContext";
+import { loadApplications, loadPostedNotices, savePostedNotice } from "../lib/openlabStore";
 
 export default function Notices() {
+  const { auth } = useAuth();
   const [posted, setPosted] = useState<any[] | null>(null);
+  const [storeVersion, setStoreVersion] = useState(0);
 
   useEffect(() => {
     let mounted = true;
@@ -21,8 +25,75 @@ export default function Notices() {
     };
   }, []);
 
-  // If server returns an empty array, keep showing the original sample notices
-  const list = posted && posted.length > 0 ? posted : notices;
+  const effectiveMode: "student" | "lab" =
+    auth.role === "master"
+      ? auth.currentMode
+      : auth.role === "lab"
+        ? "lab"
+        : "student";
+
+  // Demo/seed: allow lab to manage NL-2401 as a posted notice
+  useEffect(() => {
+    if (!auth.isLoggedIn) return;
+    if (effectiveMode !== "lab") return;
+    const ownerEmail = auth.user?.email || "";
+    const lab = auth.user?.labName || "";
+    if (!ownerEmail || !lab) return;
+
+    const existing = loadPostedNotices().find((n) => n.id === "NL-2401" && n.ownerEmail === ownerEmail);
+    if (existing) return;
+
+    const base = notices.find((n) => n.id === "NL-2401");
+    if (!base) return;
+
+    savePostedNotice({
+      id: base.id,
+      title: base.title,
+      description: base.description,
+      duration: base.duration,
+      deadline: base.deadline,
+      status: base.status,
+      criteria: "Python\nPandas\nNumPy\n시계열 데이터 전처리 경험",
+      lab,
+      ownerEmail,
+      createdAt: new Date().toISOString(),
+    });
+    setStoreVersion((v) => v + 1);
+  }, [auth.isLoggedIn, auth.role, auth.currentMode, auth.user?.email, auth.user?.labName, effectiveMode]);
+
+  // storeVersion is used only to force rerender after seeding
+  const localPosted = loadPostedNotices();
+  void storeVersion;
+
+  // If server returns an empty array, fall back to localStorage posted notices
+  const remotePosted = posted && posted.length > 0 ? posted : [];
+
+  const uniqStudent: any[] = [];
+  const seen = new Set<string>();
+  for (const n of [...remotePosted, ...localPosted, ...notices]) {
+    const nid = String(n?.id || "");
+    if (!nid) continue;
+    if (seen.has(nid)) continue;
+    seen.add(nid);
+    uniqStudent.push(n);
+  }
+
+  const list =
+    effectiveMode === "lab"
+      ? [...remotePosted, ...localPosted].filter(
+          (n: any) => (n?.ownerEmail || "") === (auth.user?.email || "")
+        )
+      : uniqStudent;
+
+  const applications = loadApplications();
+  const applicantCounts = new Map<string, number>();
+  for (const a of applications) {
+    const nid = String((a as any)?.noticeId || "");
+    if (!nid) continue;
+    applicantCounts.set(nid, (applicantCounts.get(nid) || 0) + 1);
+  }
+
+  const myEmail = (auth.user?.email || "").trim().toLowerCase();
 
   return (
     <div className="bg-white text-navy">
@@ -32,9 +103,13 @@ export default function Notices() {
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
               Notices
             </p>
-            <h1 className="text-3xl font-semibold">공고 게시판</h1>
+            <h1 className="text-3xl font-semibold">
+              {effectiveMode === "lab" ? "게시한 공고" : "공고 게시판"}
+            </h1>
             <p className="text-base text-navy/70">
-              연구실에서 올린 마이크로 태스크 공고를 확인하고 바로 지원하세요.
+              {effectiveMode === "lab"
+                ? "내가 등록한 공고와 지원자를 확인할 수 있습니다."
+                : "연구실에서 올린 마이크로 태스크 공고를 확인하고 바로 지원하세요."}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-navy/10 bg-slate px-4 py-3 text-sm text-navy/70">
@@ -71,6 +146,18 @@ export default function Notices() {
                     <span className="ml-3 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
                       {notice.status}
                     </span>
+
+                    {effectiveMode === "student" && auth.isLoggedIn && myEmail && applications.some((a: any) => a.noticeId === notice.id && (a.email || "").toLowerCase() === myEmail) && (
+                      <span className="ml-2 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                        지원완료
+                      </span>
+                    )}
+
+                    {effectiveMode === "lab" && (
+                      <span className="ml-2 rounded-full bg-slate px-3 py-1 text-xs font-semibold text-navy/70">
+                        지원자 {(applicantCounts.get(String(notice.id)) || 0)}명
+                      </span>
+                    )}
                   </div>
                   <div className="text-sm text-navy/70">{notice.lab}</div>
                   <div className="text-sm text-navy/70">{notice.duration}</div>

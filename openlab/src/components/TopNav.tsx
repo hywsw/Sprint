@@ -1,8 +1,17 @@
 ﻿import { NavLink, Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 
-const navItems = [
-  { label: "공고", to: "/notices" },
+const studentNavItems = [
+  { label: "공고 게시판", to: "/notices" },
+  { label: "참여 가이드", to: "/guide" },
+  { label: "커뮤니티", to: "/community" },
+  { label: "resume screening", to: "/resume-screener" },
+  { label: "마이페이지", to: "/mypage" },
+  { label: "FAQ", to: "/faq" },
+];
+
+const labNavItems = [
+  { label: "게시한 공고", to: "/notices" },
   { label: "공고 등록", to: "/post" },
   { label: "참여 가이드", to: "/guide" },
   { label: "커뮤니티", to: "/community" },
@@ -15,6 +24,19 @@ import { useAuth } from "../context/AuthContext";
 
 export default function TopNav() {
   const { auth } = useAuth();
+
+  const effectiveMode: "student" | "lab" =
+    auth.role === "master"
+      ? auth.currentMode
+      : auth.role === "lab"
+        ? "lab"
+        : "student";
+
+  const navItems = auth.isLoggedIn
+    ? effectiveMode === "lab"
+      ? labNavItems
+      : studentNavItems
+    : studentNavItems;
 
   const getInitials = (name?: string | undefined, email?: string | undefined) => {
     if (name && name.trim()) {

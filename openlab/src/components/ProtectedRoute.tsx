@@ -7,7 +7,7 @@ export default function ProtectedRoute({
   role,
 }: {
   children: React.ReactElement;
-  role?: "lab" | "user";
+  role?: "lab" | "student";
 }) {
   const { auth } = useAuth();
 
@@ -15,9 +15,16 @@ export default function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  if (role && auth.role !== role) {
-    // unauthorized
-    return <Navigate to="/" replace />;
+  if (role) {
+    const allowed =
+      auth.role === "master"
+        ? auth.currentMode === role
+        : auth.role === role;
+
+    if (!allowed) {
+      // unauthorized
+      return <Navigate to="/" replace />;
+    }
   }
 
   return children;

@@ -1,8 +1,12 @@
 import { useState } from "react";
 
 export default function ResumeScreener() {
-  const [jobDescription, setJobDescription] = useState<string>("");
-  const [criteria, setCriteria] = useState<string>("- ");
+  const [jobDescription, setJobDescription] = useState<string>(
+    "Data Preprocessing / Research Assistant\n\n- Clean and preprocess tabular data\n- Build reproducible pipelines\n- Basic Python + Pandas required"
+  );
+  const [criteria, setCriteria] = useState<string>(
+    "- Python/Pandas 사용 경험\n- 데이터 전처리 프로젝트 경험\n- 협업/문서화 경험"
+  );
   const [resumeText, setResumeText] = useState<string>("");
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -20,17 +24,16 @@ export default function ResumeScreener() {
 
     try {
       const fd = new FormData();
-      fd.append("jobDescription", jobDescription);
+      fd.append("job_description", jobDescription);
       fd.append("criteria", criteria);
-      if (resumeText) fd.append("resumeText", resumeText);
+      if (resumeText) fd.append("resume_text", resumeText);
       if (resumeFile) fd.append("resume", resumeFile, resumeFile.name);
 
-      const res = await fetch("/api/resume-screen", { method: "POST", body: fd });
-      const txt = await res.text();
-      let j = null;
-      try { j = JSON.parse(txt); } catch (e) { throw new Error("서버 응답 파싱 실패"); }
-      if (!j?.success) throw new Error(j?.error || "실패");
-      setResult(j.data);
+      const res = await fetch("http://localhost:8000/analyze-resume", { method: "POST", body: fd });
+      const j = await res.json();
+      
+      if (!j?.success) throw new Error(j?.error || "평가 실패");
+      setResult(j);
     } catch (err: any) {
       alert(err.message || "오류가 발생했습니다");
     }

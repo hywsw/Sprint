@@ -80,7 +80,7 @@ export default function MyPage() {
     setResumeError(null);
   };
 
-  const { logout } = useAuth();
+  const { auth, logout, switchMode } = useAuth();
   const navigate = useNavigate();
 
   const addSkill = () => {
@@ -109,6 +109,39 @@ export default function MyPage() {
             이력서, 학력/경력, 보유 기술 스택을 관리해 공고 매칭 정확도를 높이세요.
           </p>
         </div>
+
+        {auth.role === "master" && (
+          <div className="rounded-3xl border border-navy/10 bg-white p-6 shadow-sm">
+            <p className="text-sm font-semibold text-navy">Master 모드 전환</p>
+            <p className="mt-2 text-sm text-navy/70">
+              현재 모드: <span className="font-semibold text-navy">{auth.currentMode === "student" ? "학생" : "연구실"}</span>
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => switchMode("student")}
+                className={`rounded-full border px-5 py-2 text-sm font-semibold transition ${
+                  auth.currentMode === "student"
+                    ? "border-accent bg-accent/10 text-accent"
+                    : "border-navy/20 text-navy/70 hover:border-navy/40"
+                }`}
+              >
+                학생 모드
+              </button>
+              <button
+                type="button"
+                onClick={() => switchMode("lab")}
+                className={`rounded-full border px-5 py-2 text-sm font-semibold transition ${
+                  auth.currentMode === "lab"
+                    ? "border-accent bg-accent/10 text-accent"
+                    : "border-navy/20 text-navy/70 hover:border-navy/40"
+                }`}
+              >
+                연구실 모드
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="flex flex-col gap-6">

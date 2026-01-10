@@ -1,23 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-type Role = "user" | "lab";
+type Role = "student" | "lab" | "master";
 
 type User = {
   email: string;
   name?: string;
   labName?: string;
+  isMaster?: boolean;
 };
 
 type AuthState = {
   isLoggedIn: boolean;
   role: Role | null;
   user: User | null;
+  currentMode: "student" | "lab"; // master가 선택한 현재 모드
 };
 
 type AuthContextValue = {
   auth: AuthState;
   login: (role: Role, user: User) => void;
   logout: () => void;
+  switchMode: (mode: "student" | "lab") => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -30,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       /* ignore */
     }
-    return { isLoggedIn: false, role: null, user: null };
+    return { isLoggedIn: false, role: null, user: null, currentMode: "student" };
   });
 
   useEffect(() => {
@@ -42,15 +45,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [auth]);
 
   const login = (role: Role, user: User) => {
-    setAuth({ isLoggedIn: true, role, user });
+    const currentMode = role === "master" ? "student" : role === "student" ? "student" : "lab";
+    setAuth({ isLoggedIn: true, role, user, currentMode });
   };
 
   const logout = () => {
-    setAuth({ isLoggedIn: false, role: null, user: null });
+    setAuth({ isLoggedIn: false, role: null, user: null, currentMode: "student" });
+  };
+
+  const switchMode = (mode: "student" | "lab") => {
+    if (auth.role === "master") {
+      setAuth({ ...auth, currentMode: mode });
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider value={{ auth, login, logout, switchMode }}>
       {children}
     </AuthContext.Provider>
   );
