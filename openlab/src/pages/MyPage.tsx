@@ -235,7 +235,6 @@ export default function MyPage() {
                     type="text"
                   />
                 </label>
-
                 <label className="text-sm font-semibold text-navy">
                   지원 포지션
                   <input
