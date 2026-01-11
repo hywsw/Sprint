@@ -10,3 +10,4 @@ backend/.turbo/
 backend/.tsbuildinfo
 backend/.env.*
 backend/prisma/migrations/
+openlab/codex/
