@@ -3,16 +3,24 @@
 @tailwind utilities;
 
 :root {
-  color: #0b1c3a;
-  background-color: #ffffff;
-  font-family: "Manrope", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: rgb(var(--ink));
+  background-color: rgb(var(--mist));
+  font-family: "Space Grotesk", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  --ink: 10 15 31;
+  --night: 5 7 13;
+  --accent: 45 212 255;
+  --accent-strong: 23 179 255;
+  --slate: 169 180 198;
+  --mist: 246 248 251;
+  --panel: 17 24 39;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: rgb(var(--mist));
 }
 
 #app {

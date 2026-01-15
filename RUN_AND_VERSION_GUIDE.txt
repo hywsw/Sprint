@@ -1,0 +1,38 @@
+﻿실행 방법 및 버전 정합성 가이드
+
+1) Frontend (Sprint/)
+- 런타임: Node.js (Vite 7 기준 Node 18+ 권장, @types/node 25 기준 Node 22 사용 권장)
+- 패키지 매니저: npm (package-lock.json 기준)
+- 설치: cd Sprint && npm install
+- 개발 서버: npm run dev
+- 빌드: npm run build
+- 프리뷰: npm run preview
+
+2) Backend (backend/)
+- 런타임: Node.js (Frontend와 동일 버전 권장)
+- 패키지 매니저: npm (package-lock.json 기준)
+- 설치: cd backend && npm install
+- 환경변수: DATABASE_URL 필요 (Prisma/MySQL 연결)
+- 개발 서버: npm run dev
+- 빌드/실행: npm run build && npm run start
+- 참고: 스키마 변경 시 Prisma generate/migrate 필요할 수 있음
+
+3) Resume Screening API (resume_screening/)
+- 런타임: Python 3.9 (environment.yml 기준)
+- 설치(Conda): conda env create -f environment.yml && conda activate resume-screening
+- 설치(Pip): pip install -r requirements.txt
+- 환경변수: OPENAI_API_KEY 설정 (.env 가능)
+- 실행: python main.py
+
+4) Model/Streamlit (model/)
+- 런타임: Python (requirements.txt에 버전 미고정)
+- 설치: pip install -r requirements.txt
+- 실행: streamlit run Hello_hynwl.py
+
+버전 정합성 체크
+- Node.js: Frontend/Backend 동일 메이저 버전 사용 권장. @types/node 25 기준 Node 22 권장, Vite 7 사용 시 최소 Node 18 필요.
+- TypeScript: Frontend와 Backend 모두 5.9.x 사용 중. 가능하면 동일 마이너 유지.
+- Prisma: prisma와 @prisma/client 버전 동일(6.19.1) 유지 필요.
+- DB: Prisma datasource는 MySQL로 설정됨(DATABASE_URL 확인).
+- Python: resume_screening은 Python 3.9 고정. model은 미고정이라 별도 venv 권장(특히 torch/transformers 호환 확인).
+- OpenAI 키: resume_screening에서 필수. 환경변수 누락 시 실행 실패 가능.

@@ -1,332 +1,356 @@
-﻿import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { motion, useReducedMotion, useScroll } from "framer-motion";
 import {
-  BadgeCheck,
-  BrainCircuit,
-  ClipboardList,
-  GraduationCap,
-  LineChart,
-  MessageCircle,
-  Sparkles,
-  UserSquare2,
+  AlarmClock,
+  ArrowUpRight,
+  Briefcase,
+  CheckCircle2,
+  Compass,
+  ShieldOff,
+  Target,
+  Users,
 } from "lucide-react";
-
-const steps = [
-  {
-    title: "OpenLAB Posting",
-    description:
-      "연구실이 실제 연구 프로젝트를 작은 단위로 쪼개 Unbundled Micro Task를 게시합니다.",
-    icon: ClipboardList,
-  },
-  {
-    title: "AI Screening",
-    description:
-      "LLM 기반 에이전트가 이력과 스킬을 분석해 빠르게 매칭합니다.",
-    icon: BrainCircuit,
-  },
-  {
-    title: "Interview",
-    description: "프로젝트 매니저와 짧고 명확한 인터뷰로 목표를 맞춥니다.",
-    icon: MessageCircle,
-  },
-  {
-    title: "Participation",
-    description: "프로젝트에 참여하고 스킬 기반 인증서를 받습니다.",
-    icon: BadgeCheck,
-  },
-];
-
-const projects = [
-  {
-    id: "NL-2401",
-    title: "Stock Prediction Transformer Model - Data Preprocessing",
-    lab: "B 교수 산업공학 연구실",
-    duration: "1개월",
-    skill: "Pandas, Python",
-    tag: "Data Science",
-  },
-  {
-    id: "NL-2402",
-    title: "Bio-Signal Classification - Feature Extraction",
-    lab: "NeuroTech 연구그룹",
-    duration: "3주",
-    skill: "NumPy, Signal Processing",
-    tag: "Bioinformatics",
-  },
-  {
-    id: "NL-2403",
-    title: "Smart Campus Energy Forecasting - Data Labeling",
-    lab: "스마트 시스템 연구실",
-    duration: "2주",
-    skill: "Labeling, Excel",
-    tag: "Smart Systems",
-  },
-];
+import { Link } from "react-router-dom";
+import CTAButton from "../components/CTAButton";
+import Section from "../components/Section";
+import SprintCard from "../components/SprintCard";
+import Timeline from "../components/Timeline";
+import RubricGrid from "../components/RubricGrid";
+import ScrollReveal from "../components/ScrollReveal";
+import { sprints } from "../data/sprints";
 
 export default function Home() {
-  const year = useMemo(() => new Date().getFullYear(), []);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+
+  const solutionSteps = [
+    {
+      title: "과제 제시",
+      description: "기업이 해결해야 할 실제 업무를 명확한 과제로 정의합니다.",
+    },
+    {
+      title: "팀 구성",
+      description: "전공을 가리지 않고 팀이 구성되어 다양한 시각을 만듭니다.",
+    },
+    {
+      title: "집중 실행",
+      description: "짧은 기간 몰입해 실행과 결과를 빠르게 확인합니다.",
+    },
+    {
+      title: "검증된 결과",
+      description: "루브릭 기반 평가로 실력과 협업을 검증합니다.",
+    },
+    {
+      title: "채용 연결",
+      description: "성과가 입증된 팀에게 인턴십 제안을 연결합니다.",
+    },
+  ];
+
+  const workSteps = [
+    {
+      title: "Challenge 게시",
+      description: "범위, 산출물, 평가 기준을 정의합니다.",
+    },
+    {
+      title: "팀 지원",
+      description: "교차 전공 팀이 지원하고 스프린트에 합류합니다.",
+    },
+    {
+      title: "Sprint Week",
+      description: "협업과 체크포인트로 집중 실행을 관리합니다.",
+    },
+    {
+      title: "Demo Day",
+      description: "루브릭으로 실행력과 완성도를 평가합니다.",
+    },
+    {
+      title: "Hire & Onboard",
+      description: "우수 팀에게 인턴십을 제안합니다.",
+    },
+  ];
 
   return (
-    <>
-      <section id="home" className="relative overflow-hidden bg-white">
-        <div className="absolute -top-40 right-0 h-72 w-72 rounded-full bg-accent/20 blur-3xl" />
-        <div className="absolute bottom-10 left-0 h-56 w-56 rounded-full bg-navy/10 blur-3xl" />
-        <div className="mx-auto flex max-w-6xl flex-col gap-16 px-6 pb-16 pt-10 md:pt-16">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="space-y-6">
-              <p className="inline-flex items-center gap-2 rounded-full bg-slate px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-navy/70">
-                <LineChart className="h-4 w-4 text-accent" />
-                Skill-based Research Experience
-              </p>
-              <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
-                OpenLAB: 
-                <br />
-                Unbundling of Research
-              </h1>
-              <p className="text-lg text-navy/70">
-                Light Commitment, Heavy Impact:
-                <br />
-                Degree based to Skill-based Experience
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <button className="rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-[#1557D6]">
-                  프로젝트 찾기
-                </button>
-                <button className="rounded-full border border-navy/20 px-6 py-3 text-sm font-semibold text-navy transition hover:-translate-y-0.5 hover:border-navy/40">
-                  랩 공고 등록
-                </button>
-              </div>
-              <div className="flex flex-wrap gap-6 text-sm text-navy/60">
-                <div className="flex items-center gap-2">
-                  <UserSquare2 className="h-4 w-4 text-accent" />
-                  바로 지원 가능한 Micro-tasks
-                </div>
-                <div className="flex items-center gap-2">
-                  <BadgeCheck className="h-4 w-4 text-accent" />
-                  Skill-based Certification 제공
-                </div>
-              </div>
-            </div>
+    <motion.div
+      initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: reduceMotion ? 0 : -12 }}
+      transition={{ duration: reduceMotion ? 0 : 0.5 }}
+      className="bg-mist"
+    >
+      <motion.div
+        className="fixed left-0 top-0 z-50 h-[3px] w-full origin-left bg-accent"
+        style={{ scaleX: scrollYProgress }}
+      />
 
-            <div className="rounded-3xl border border-navy/10 bg-slate p-8 shadow-xl">
-              <div className="space-y-6">
-                <div className="rounded-2xl bg-white p-6 shadow-sm">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                    Ongoing Project
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold">
-                    Stock Prediction Transformer Model
-                  </h3>
-                  <p className="mt-2 text-sm text-navy/60">
-                    B 교수 연구실과 함께하는 1개월 데이터 전처리 스프린트입니다.
-                  </p>
-                  <div className="mt-4 flex items-center gap-2 text-xs text-navy/60">
-                    <span className="rounded-full bg-accent/10 px-3 py-1 text-accent">
-                      Unbundled Task
-                    </span>
-                    <span>Python · Pandas</span>
-                  </div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-2xl bg-white p-5 text-sm text-navy/70 shadow-sm">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                      For Students
-                    </p>
-                    <p className="mt-2">
-                      짧은 기간으로 실제 연구 경험을 쌓아보세요.
-                    </p>
-                  </div>
-                  <div className="rounded-2xl bg-white p-5 text-sm text-navy/70 shadow-sm">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                      For Labs
-                    </p>
-                    <p className="mt-2">
-                      검증된 인력을 빠르게 연구에 연결합니다.
-                    </p>
-                  </div>
-                </div>
-              </div>
+      <section className="relative overflow-hidden bg-night py-20 text-white md:py-28">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(45,212,255,0.15),transparent_55%)]" />
+        <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-10 px-6">
+          <ScrollReveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs uppercase tracking-[0.4em] text-slate">
+              Hiring Sprint
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="why" className="bg-slate py-16">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 md:grid-cols-2">
-          <div className="space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-              Why OpenLAB?
+            <h1 className="mt-6 text-4xl font-semibold leading-tight md:text-6xl">
+              실무 과제로 검증하는 채용, Hiring Sprint
+            </h1>
+            <p className="mt-6 max-w-2xl text-base text-slate md:text-lg">
+              지원자는 짧게 몰입해 결과로 증명하고, 기업은 채용 리스크 없이 검증된
+              인재와 결과물을 받습니다.
             </p>
-            <h2 className="text-3xl font-semibold">Solve the Dilemma of Choice</h2>
-            <p className="text-base text-navy/70">
-              학생은 전공이 아닌 연구 주제에 도전하고 싶은 마음과, 전공 공부의 지속 사이에서 고민합니다.
-            </p>
-            <div className="rounded-2xl border border-navy/10 bg-white p-5 text-sm text-navy/70 shadow-sm">
-              <p className="font-semibold text-navy">The Problem</p>
-              <p className="mt-2">
-                본 전공을 벗어나는 것에 대한 두려움 + 관심 분야에 도전하지 못하는 것에 대한 아쉬움
-              </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <CTAButton to="/company/create">Hiring Sprint 시작하기</CTAButton>
+              <CTAButton to="/sprints" variant="secondary">
+                Sprint 참여하기
+              </CTAButton>
             </div>
-          </div>
-          <div className="space-y-4">
-            <div className="rounded-2xl border border-navy/10 bg-white p-6 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-                The Solution
-              </p>
-              <h3 className="mt-2 text-2xl font-semibold">Micro-tasks</h3>
-              <p className="mt-2 text-sm text-navy/70">
-                바로 지원 가능한 집중형 micro task로 실제 연구 환경을 경험합니다.
-              </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl bg-white p-5 text-sm text-navy/70 shadow-sm">
-                <p className="font-semibold text-navy">Students</p>
-                <p className="mt-2">
-                  관심 분야의 연구에 가벼운 참여로 경험을 쌓습니다.
-                </p>
-              </div>
-              <div className="rounded-2xl bg-white p-5 text-sm text-navy/70 shadow-sm">
-                <p className="font-semibold text-navy">Labs</p>
-                <p className="mt-2">
-                  검증된 인력을 필요한 task에 빠르게 투입합니다.
-                </p>
-              </div>
-            </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <section id="how" className="bg-white py-16">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-                How It Works
-              </p>
-              <h2 className="text-3xl font-semibold">Four steps to impact</h2>
-              <p className="text-base text-navy/70">
-                AI 기반 screening과 전문가와의 간단한 interview로 빠르게 매칭합니다.
-              </p>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-navy/60">
-              <Sparkles className="h-4 w-4 text-accent" />
-              AI Screening + 빠른 Interview
-            </div>
-          </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <div
-                  key={step.title}
-                  className="group rounded-2xl border border-navy/10 bg-slate p-6 shadow-sm transition hover:-translate-y-1 hover:bg-white"
-                >
-                  <div className="flex items-center justify-between">
-                    <Icon className="h-5 w-5 text-accent" />
-                    <span className="text-xs font-semibold text-navy/40">
-                      0{index + 1}
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold">{step.title}</h3>
-                  <p className="mt-2 text-sm text-navy/70">{step.description}</p>
+      <Section
+        eyebrow="Problem"
+        title="스타트업이 겪는 채용 문제"
+        subtitle="반복적이지만 중요한 일, 그리고 느린 채용 사이에서 팀이 지칩니다."
+      >
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            {
+              icon: <AlarmClock className="h-5 w-5 text-accent" />,
+              title: "중요하지만 반복적인 업무 병목",
+              description: "운영/분석 업무가 쌓이고 핵심 팀은 집중하지 못합니다.",
+            },
+            {
+              icon: <ShieldOff className="h-5 w-5 text-accent" />,
+              title: "정규 채용은 무겁고 인턴은 관리 부담",
+              description: "리스크를 줄이려 하지만 검증 비용이 커집니다.",
+            },
+            {
+              icon: <Briefcase className="h-5 w-5 text-accent" />,
+              title: "서류 중심 필터는 실행을 증명 못함",
+              description: "전공/경력 키워드만으로 실무 실행을 판단하기 어렵습니다.",
+            },
+          ].map((item) => (
+            <ScrollReveal key={item.title}>
+              <div className="rounded-2xl border border-ink/10 bg-white/90 p-6 shadow-[0_30px_80px_-60px_rgba(10,15,31,0.5)]">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10">
+                    {item.icon}
+                  </span>
+                  <p className="text-sm font-semibold text-ink">{item.title}</p>
                 </div>
-              );
-            })}
+                <p className="mt-4 text-sm text-ink/70">{item.description}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        eyebrow="Solution"
+        title="Hiring Sprint 방식"
+        subtitle="결과로 증명하고, 팀워크까지 확인하는 초단기 검증 프로세스"
+        className="bg-white"
+      >
+        <Timeline steps={solutionSteps} />
+      </Section>
+
+      <Section
+        eyebrow="How It Works"
+        title="5단계로 움직이는 스프린트"
+        subtitle="짧고 집중된 주기를 통해 실력을 검증합니다."
+      >
+        <Timeline steps={workSteps} />
+      </Section>
+
+      <Section
+        eyebrow="What You Get"
+        title="기업과 지원자 모두의 성과"
+        subtitle="검증된 실행력은 기업과 인재 모두에게 이익이 됩니다."
+        className="bg-white"
+      >
+        <div className="grid gap-6 md:grid-cols-2">
+          <ScrollReveal>
+            <div className="rounded-2xl border border-ink/10 bg-white/90 p-6">
+              <div className="flex items-center gap-3">
+                <Target className="h-5 w-5 text-accent" />
+                <h3 className="text-lg font-semibold text-ink">기업이 얻는 것</h3>
+              </div>
+              <ul className="mt-4 space-y-3 text-sm text-ink/70">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  검증된 인재를 빠르게 확보
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  즉시 활용 가능한 결과물 확보
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  채용 리스크 및 시간 비용 감소
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  팀워크까지 검증된 결정
+                </li>
+              </ul>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal>
+            <div className="rounded-2xl border border-ink/10 bg-white/90 p-6">
+              <div className="flex items-center gap-3">
+                <Users className="h-5 w-5 text-accent" />
+                <h3 className="text-lg font-semibold text-ink">지원자가 얻는 것</h3>
+              </div>
+              <ul className="mt-4 space-y-3 text-sm text-ink/70">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  실제 업무에 가까운 경험
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  포트폴리오로 쓰는 결과물
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  루브릭 기반 피드백
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accentStrong" />
+                  인턴십 제안 기회
+                </li>
+              </ul>
+            </div>
+          </ScrollReveal>
+        </div>
+      </Section>
+
+      <Section
+        eyebrow="Featured"
+        title="Featured Sprints"
+        subtitle="샘플 데이터입니다. 실제 스프린트는 곧 오픈됩니다."
+      >
+        <div className="grid gap-6 md:grid-cols-2">
+          {sprints.slice(0, 4).map((sprint) => (
+            <ScrollReveal key={sprint.id}>
+              <SprintCard sprint={sprint} />
+            </ScrollReveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section
+        eyebrow="Rubric"
+        title="평가 루브릭"
+        subtitle="서류보다 결과 중심으로 판단합니다."
+        className="bg-white"
+      >
+        <RubricGrid
+          items={[
+            "Execution Speed",
+            "Clarity of Thinking",
+            "Collaboration",
+            "Deliverable Quality",
+            "Practicality",
+          ]}
+        />
+        <p className="text-sm text-ink/60">서류보다 결과 중심 평가</p>
+      </Section>
+
+      <Section
+        eyebrow="Trust"
+        title="신뢰를 만드는 요소"
+        subtitle="파일럿 단계에서 빠르게 검증할 수 있도록 설계했습니다."
+      >
+        <div className="grid gap-8 md:grid-cols-[1.2fr_1fr]">
+          <ScrollReveal>
+            <div className="rounded-2xl border border-ink/10 bg-white/90 p-6">
+              <div className="flex items-center gap-3">
+                <Compass className="h-5 w-5 text-accent" />
+                <p className="text-lg font-semibold text-ink">Pilot-ready</p>
+              </div>
+              <p className="mt-3 text-sm text-ink/70">
+                첫 스프린트부터 명확한 목표와 산출물을 제시합니다.
+              </p>
+              <div className="mt-6 grid grid-cols-3 gap-3 text-xs text-ink/50">
+                <div className="rounded-lg border border-ink/10 px-3 py-2 text-center">
+                  Logo
+                </div>
+                <div className="rounded-lg border border-ink/10 px-3 py-2 text-center">
+                  Logo
+                </div>
+                <div className="rounded-lg border border-ink/10 px-3 py-2 text-center">
+                  Logo
+                </div>
+              </div>
+              <p className="mt-4 text-xs text-ink/50">B2B partners (coming soon)</p>
+            </div>
+          </ScrollReveal>
+          <ScrollReveal>
+            <div className="rounded-2xl border border-ink/10 bg-white/90 p-6">
+              <p className="text-sm font-semibold text-ink">FAQ</p>
+              <div className="mt-4 space-y-4 text-sm text-ink/70">
+                <div>
+                  <p className="font-semibold text-ink">비용 구조는 어떻게 되나요?</p>
+                  <p>파일럿 단계 기준으로 협의 중입니다.</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-ink">과제 범위는 어떻게 정하나요?</p>
+                  <p>해결하고 싶은 병목을 기준으로 스코프를 설계합니다.</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-ink">지원자는 어떻게 팀을 구성하나요?</p>
+                  <p>전공/직무 교차 팀을 기본 원칙으로 안내합니다.</p>
+                </div>
+                <div>
+                  <p className="font-semibold text-ink">결과물 권한과 사용 범위는?</p>
+                  <p>정책 문서를 준비 중입니다.</p>
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </Section>
+
+      <section className="bg-night py-16 text-white md:py-20">
+        <div className="mx-auto grid w-full max-w-7xl gap-6 px-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-8">
+            <h3 className="text-2xl font-semibold">기업을 위한 Sprint</h3>
+            <p className="mt-4 text-sm text-slate">
+              실무 과제로 검증된 인재와 결과물을 동시에 확보하세요.
+            </p>
+            <CTAButton to="/company/create" className="mt-6">
+              Start a Hiring Sprint
+              <ArrowUpRight className="h-4 w-4" />
+            </CTAButton>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-8">
+            <h3 className="text-2xl font-semibold">지원자를 위한 Sprint</h3>
+            <p className="mt-4 text-sm text-slate">
+              짧은 기간 집중해서 실력을 증명하고 인턴십 기회를 얻으세요.
+            </p>
+            <CTAButton to="/sprints" variant="secondary" className="mt-6">
+              Sprint 참여하기
+              <ArrowUpRight className="h-4 w-4" />
+            </CTAButton>
           </div>
         </div>
       </section>
 
-      <section id="projects" className="bg-slate py-16">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-                Featured Projects
-              </p>
-              <h2 className="text-3xl font-semibold">
-                집중형 Micro Task로 시작하세요
-              </h2>
-            </div>
-            <Link
-              to="/notices"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-accent"
-            >
-              더 많은 프로젝트 보기
-              <Sparkles className="h-4 w-4" />
+      <footer className="bg-night py-10 text-slate">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-6 text-sm md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="font-semibold text-white">Sprint</p>
+            <p className="text-xs text-slate">contact@sprint.ai (placeholder)</p>
+          </div>
+          <div className="flex flex-wrap gap-4 text-xs">
+            <Link to="/terms" className="hover:text-white">
+              Terms
             </Link>
+            <Link to="/privacy" className="hover:text-white">
+              Privacy
+            </Link>
+            <span>&copy; 2026 Sprint</span>
           </div>
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {projects.map((project) => (
-              <Link key={project.id} to={`/notices/${project.id}`} className="block h-full">
-                <article className="flex h-full flex-col justify-between rounded-3xl border border-navy/10 bg-white p-6 shadow-sm">
-                  <div className="space-y-4">
-                    <span className="inline-flex w-fit items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-                      {project.tag}
-                    </span>
-                    <h3 className="text-lg font-semibold">{project.title}</h3>
-                    <p className="text-sm text-navy/70">{project.lab}</p>
-                  </div>
-                  <div className="mt-6 space-y-2 text-sm text-navy/60">
-                    <div className="flex items-center justify-between">
-                      <span>기간</span>
-                      <span className="font-semibold text-navy">{project.duration}</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>기술</span>
-                      <span className="font-semibold text-navy">{project.skill}</span>
-                    </div>
-                  </div>
-                </article>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <footer id="trust" className="bg-navy py-12 text-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-6 md:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-                <GraduationCap className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em]">
-                  OpenLAB
-                </p>
-                <p className="text-xs text-white/60">Unbundling of Research</p>
-              </div>
-            </div>
-            <p className="text-sm text-white/70">
-              검증된 인증서와 AI agent 기반 screening으로 연구실과 학생을 연결합니다.
-            </p>
-          </div>
-          <div className="grid gap-4 text-sm text-white/70 sm:grid-cols-2">
-            <div className="flex items-start gap-3">
-              <BadgeCheck className="mt-1 h-4 w-4 text-accent" />
-              <div>
-                <p className="font-semibold text-white">Credentialing</p>
-                <p className="text-white/60">
-                  실제 연구 성과를 증명하는 인증서를 제공합니다.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <LineChart className="mt-1 h-4 w-4 text-accent" />
-              <div>
-                <p className="font-semibold text-white">AI agent Screening</p>
-                <p className="text-white/60">
-                  AI 기반 스킬 매칭으로 빠른 채용을 지원합니다.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto mt-10 flex max-w-6xl flex-col gap-2 px-6 text-xs text-white/50 md:flex-row md:items-center md:justify-between">
-          <p>© {year} OpenLAB. 모든 권리 보유.</p>
-          <p>Unbundling of Research: Light Commitment, Heavy Impact.</p>
         </div>
       </footer>
-    </>
+    </motion.div>
   );
 }
