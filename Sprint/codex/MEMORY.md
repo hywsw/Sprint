@@ -138,3 +138,19 @@ Assistant: MEMORY.md에 작업 내용 추가 요청 수행.
 - DB setup: MySQL ?? ? Prisma migrate ??, shadow DB ?? ?? ??.
 - Auth API: `/auth/signup`, `/auth/login` ?? (bcrypt ?? ??) (`backend/src/routes/auth.ts`, `backend/src/server.ts`).
 - Frontend auth: Signup/Login API ?? ? ??/?? ?? (`openlab/src/pages/Signup.tsx`, `openlab/src/pages/Login.tsx`).
+# 2026-01-15 (Sprint Vite 전환/정리/기능 업데이트)
+- 기반 유지: Next.js 전환은 보류하고 Vite + React + TS + Tailwind 환경 유지.
+- 디자인/브랜딩: OpenLAB -> Sprint로 전면 교체, Space Grotesk 폰트 적용, CSS 변수 기반 컬러 시스템(ink/night/accent 등)으로 Tailwind 색상 매핑, 다크 톤 네비/히어로 포함.
+- 라우팅/플로우: 2-step entry("/" Intro/Manifesto -> "/home" 메인 랜딩) + 주요 라우트(/sprints, /sprints/:id, /company, /company/create, /apply, /community, /resume-screener, /mypage, /terms, /privacy) 구성.
+- 모션: framer-motion 추가(AnimatePresence, page transitions, scroll reveal, reduced motion 대응).
+- UI 컴포넌트: CTAButton, Section, ScrollReveal, SprintCard, Timeline, RubricGrid 등 재사용 컴포넌트 생성.
+- 데이터: 스프린트 샘플 데이터(JSON) 추가로 카드/상세 페이지 렌더.
+- 페이지 구성: Intro/메인 랜딩(문제-해결-작동-루브릭-FAQ-CTA), 스프린트 목록/상세, 기업 대시보드/생성(멀티스텝 UI), 지원자 온보딩, 커뮤니티/리줌 스크리닝/마이페이지(플레이스홀더+CTA).
+- 실행/정리: npm install 수행(프론트 실행 확인), 불필요 OpenLAB 잔여 파일/폴더 제거(src/context, src/lib, notices, auth 등), 사용하지 않는 deps(formidable, pdf-parse) 제거.
+- 문서: 루트 README를 Sprint 기준으로 갱신 + Sprint/README.md 추가(실행 방법/라우트 요약).
+- 네비게이션: 메뉴 구성 조정(학생/기업 분기), 마이페이지는 로그인/회원가입 아래 얇은 버튼으로 이동, 메뉴 과밀 문제 해결.
+- 인증(더미): AuthContext 추가(localStorage 기반), 학생/기업 더미 계정(student01/company01, password sprint1234) 제공, 로그인 페이지에서 자동 입력 버튼 제공.
+- 접근 제어: RequireRole(기업 전용) + RequireAuth(로그인 필수) 추가.
+  - 기업 전용: /company, /company/create
+  - 로그인 필수: /apply, /mypage, /resume-screener
+- 로그인/회원가입 UI: 역할 탭(학생/기업) 추가, 회원가입 폼에 아이디+중복체크 버튼/기업명(기업일 때) 추가, 인코딩 깨짐 이슈 수정(한글 복구).

@@ -9,6 +9,13 @@ import CompanyDashboard from "./pages/CompanyDashboard";
 import Apply from "./pages/Apply";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Community from "./pages/Community";
+import ResumeScreener from "./pages/ResumeScreener";
+import MyPage from "./pages/MyPage";
+import RequireRole from "./components/RequireRole";
+import RequireAuth from "./components/RequireAuth";
 import TopNav from "./components/TopNav";
 
 function MainLayout() {
@@ -32,9 +39,49 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/sprints" element={<Sprints />} />
           <Route path="/sprints/:id" element={<SprintDetail />} />
-          <Route path="/company/create" element={<CompanyCreate />} />
-          <Route path="/company" element={<CompanyDashboard />} />
-          <Route path="/apply" element={<Apply />} />
+          <Route
+            path="/company/create"
+            element={
+              <RequireRole role="company">
+                <CompanyCreate />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/company"
+            element={
+              <RequireRole role="company">
+                <CompanyDashboard />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/apply"
+            element={
+              <RequireAuth>
+                <Apply />
+              </RequireAuth>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/community" element={<Community />} />
+          <Route
+            path="/resume-screener"
+            element={
+              <RequireAuth>
+                <ResumeScreener />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/mypage"
+            element={
+              <RequireAuth>
+                <MyPage />
+              </RequireAuth>
+            }
+          />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
         </Route>
