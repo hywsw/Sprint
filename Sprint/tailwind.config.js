@@ -4,12 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        navy: "#0B1C3A",
-        accent: "#1E6BFF",
-        slate: "#F3F5F8",
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        night: "rgb(var(--night) / <alpha-value>)",
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        accentStrong: "rgb(var(--accent-strong) / <alpha-value>)",
+        slate: "rgb(var(--slate) / <alpha-value>)",
+        mist: "rgb(var(--mist) / <alpha-value>)",
+        panel: "rgb(var(--panel) / <alpha-value>)",
       },
       boxShadow: {
-        glow: "0 20px 60px -30px rgba(30, 107, 255, 0.6)",
+        glow: "0 30px 70px -35px rgba(45, 212, 255, 0.7)",
+      },
+      fontFamily: {
+        sans: ['"Space Grotesk"', '"Segoe UI"', '"Helvetica Neue"', "Arial", "sans-serif"],
       },
     },
   },

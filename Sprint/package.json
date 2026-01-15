@@ -1,5 +1,5 @@
 {
-  "name": "openlab",
+  "name": "sprint",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -20,9 +20,8 @@
     "vite": "^7.2.4"
   },
   "dependencies": {
-    "formidable": "^3.5.4",
+    "framer-motion": "^12.6.4",
     "lucide-react": "^0.562.0",
-    "pdf-parse": "^2.4.5",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router-dom": "^6.30.0"
