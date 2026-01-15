@@ -1,4 +1,0 @@
-{
-  "buildCommand": "cd openlab && npm run build",
-  "outputDirectory": "openlab/dist"
-}
