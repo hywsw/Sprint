@@ -30,17 +30,17 @@ export default function TopNav() {
             <Zap className="h-5 w-5" />
           </div>
           <div className="space-y-1">
-            <p className="text-xl font-semibold tracking-[0.2em] text-white">SPRINT</p>
+            <p className="text-2xl font-semibold tracking-[0.18em] text-white">SPRINT</p>
             <p className="whitespace-nowrap text-xs text-slate">Stop screening. Start sprinting.</p>
           </div>
         </Link>
-        <nav className="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate md:flex-1 md:justify-center md:gap-3">
+        <nav className="flex w-full flex-wrap items-center gap-2 text-[13px] font-semibold text-slate md:flex-1 md:justify-between md:gap-0 md:px-6">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
               end={item.to === "/company"}
               className={({ isActive }) =>
-                `whitespace-nowrap rounded-full px-4 py-2 transition ${
+                `whitespace-nowrap rounded-full px-3 py-1.5 transition ${
                   isActive
                     ? "bg-white/10 text-white"
                     : "text-slate hover:bg-white/10 hover:text-white"

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function RequireRole({
@@ -10,9 +10,10 @@ export default function RequireRole({
   children: ReactNode;
 }) {
   const { auth } = useAuth();
+  const location = useLocation();
 
   if (!auth.isLoggedIn || auth.role !== role) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
   return <>{children}</>;
