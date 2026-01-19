@@ -18,11 +18,12 @@
 - 참고: 스키마 변경 시 Prisma generate/migrate 필요할 수 있음
 
 3) Resume Screening API (resume_screening/)
-- 런타임: Python 3.9 (environment.yml 기준)
-- 설치(Conda): conda env create -f environment.yml && conda activate resume-screening
-- 설치(Pip): pip install -r requirements.txt
-- 환경변수: OPENAI_API_KEY 설정 (.env 가능)
-- 실행: python main.py
+- 런타임: Python 3.9 (conda 권장)
+- 설치(Conda): CONDA_SOLVER=classic conda create -n resume-screening python=3.9 -c conda-forge -c defaults -y
+- 설치(Pip): conda activate resume-screening && pip install -r requirements.txt
+- Ollama: Ollama 앱 실행 필요(로컬 11434 포트). `ollama pull llama3`로 모델 다운로드 후 사용.
+- 환경변수: OLLAMA_BASE_URL(기본 http://127.0.0.1:11434), OLLAMA_MODEL(예: llama3:latest)
+- 실행: conda activate resume-screening && python main.py
 
 4) Model/Streamlit (model/)
 - 런타임: Python (requirements.txt에 버전 미고정)
@@ -35,4 +36,4 @@
 - Prisma: prisma와 @prisma/client 버전 동일(6.19.1) 유지 필요.
 - DB: Prisma datasource는 MySQL로 설정됨(DATABASE_URL 확인).
 - Python: resume_screening은 Python 3.9 고정. model은 미고정이라 별도 venv 권장(특히 torch/transformers 호환 확인).
-- OpenAI 키: resume_screening에서 필수. 환경변수 누락 시 실행 실패 가능.
+- Ollama: resume_screening은 Ollama 서버가 필요. 모델명은 `ollama list`로 확인 후 `OLLAMA_MODEL`에 맞춤.

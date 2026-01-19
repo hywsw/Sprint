@@ -1,0 +1,6 @@
+3+ years of software engineering experience
+Proficiency in Python and JavaScript
+Frontend framework experience (React or Vue)
+REST API design and integration
+Database experience (SQL)
+Collaboration and code review habits
