@@ -76,3 +76,24 @@ Assistant response summary:
 - Navbar: menu spacing and role-based menu tweaks; MyPage button moved next to logout.
 - Signup: duplicate check button + company name field.
 - Files: RequireAuth/RequireRole/Login/MyPage/TopNav updated accordingly.
+
+# 2026-01-16
+- Resume screening 작업 착수: FastAPI `resume_screening/main.py`에 기본 JD/criteria 로더 추가( `model/job_description.txt`, `model/criteria.txt`, `resume_screening/config/*.json` 우선순위) 및 텍스트 트리밍 유틸 추가.
+- FastAPI에 `/defaults` 엔드포인트 추가, `/analyze-resume`에서 JD/criteria 누락 시 기본값 자동 보완, 응답에 `extracted_text` 포함하도록 수정.
+- `model/criteria.txt`, `model/job_description.txt`에 기본 문구 작성.
+- 프론트 `Sprint/src/pages/ResumeScreener.tsx`를 업로드/분석 UI로 교체: `/defaults`로 기본값 로드, `/analyze-resume`에 FormData 전송, 결과/판정/criteria 리스트/파싱 텍스트 표시.
+- 진행 중단 지점: `resume_screening/main.py` 인코딩 깨짐(기존 주석/로그 텍스트) 확인 필요, `/defaults` 및 분석 흐름 실동작 테스트 미수행. 프론트는 `VITE_RESUME_SCREENER_URL` 없으면 `http://localhost:8000`으로 호출.
+
+# 2026-01-19
+- Resume screening 백엔드 복구: `resume_screening/main.py` 인코딩/문법 오류 정리, Ollama 호출/파싱/폴백 로직 정상화. PDF 텍스트 추출 보강, 로깅 정리.
+- 정책 변경: Ollama 응답 없으면 폴백 대신 실패 처리(`success=false`, 에러 메시지 반환)로 변경.
+- Python 환경: conda `resume-screening`(Python 3.9) 생성. libmamba로 3.9 설치 실패하여 classic solver로 성공. `resume_screening/requirements.txt`를 Python 3.13 호환 버전으로 갱신 후 conda env에 설치. venv `.venv_win` 생성 후 제거.
+- Ollama: 11434 포트에 `ollama.exe` 실행 확인. `ollama pull llama3`로 모델 다운로드 완료. `ollama run llama3 "hello"` 워밍업 후 `/analyze-resume` 성공 응답 확인.
+- Ollama 연결 이슈: `/health`에 `model: "llama3"`가 유지되어 `llama3:latest`와 불일치로 응답 없음 발생. `OLLAMA_MODEL` 환경변수를 설정한 동일 터미널에서 FastAPI 재시작 필요.
+- Resume screening UX 변경:
+  - JD/criteria는 지원자가 입력하지 않고 스프린트 공고에서 선택하도록 변경.
+  - `Sprint/src/data/sprints.ts`에 `jobDescription`, `criteria` 필드 추가(샘플 데이터).
+  - `/resume-screener`에 스프린트 선택 박스 추가, JD/criteria는 읽기 전용 표시.
+  - 스프린트 찾기 흐름: `/resume-screener`에서 “스프린트 찾기” 버튼 → `/sprints?selectFor=resume` → 스프린트 클릭 시 `/resume-screener?sprintId=...` 복귀 및 선택 반영.
+  - `Sprint/src/pages/Sprints.tsx`에서 `selectFor=resume` 모드 지원(클릭 시 resume-screener로 이동).
+  - 스프린트 찾기 버튼은 “Hiring Sprint” 라벨 아래, 선택 박스 밑으로 위치 조정 및 크기 축소.

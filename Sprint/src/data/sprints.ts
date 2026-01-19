@@ -9,6 +9,8 @@ export type Sprint = {
   tags: string[];
   summary: string;
   note: string;
+  jobDescription: string;
+  criteria: string[];
   sample?: boolean;
 };
 
@@ -24,6 +26,13 @@ export const sprints: Sprint[] = [
     tags: ["Operations", "Automation"],
     summary: "주간 리포트 생성과 배포를 자동화해 반복 업무 시간을 줄입니다.",
     note: "샘플 데이터 기반으로 동일 로직을 구현합니다.",
+    jobDescription: "Build an internal automation dashboard and reporting pipeline for weekly ops tasks.",
+    criteria: [
+      "Python automation experience",
+      "SQL data handling",
+      "Ability to document workflow",
+      "Collaboration and handoff clarity",
+    ],
     sample: true,
   },
   {
@@ -37,6 +46,13 @@ export const sprints: Sprint[] = [
     tags: ["Growth", "Data"],
     summary: "신규 유저 획득을 위한 실험 가설과 실행안을 설계합니다.",
     note: "실제 제품 시나리오를 기반으로 가설 검증 플랜을 만듭니다.",
+    jobDescription: "Plan and run growth experiments, report insights, and propose next steps.",
+    criteria: [
+      "Analytics mindset",
+      "Clear experimentation plan",
+      "Insight storytelling",
+      "Cross-functional communication",
+    ],
     sample: true,
   },
   {
@@ -50,6 +66,13 @@ export const sprints: Sprint[] = [
     tags: ["Prototype", "Product"],
     summary: "고객의 실제 작업 흐름을 반영한 대시보드 시안을 제작합니다.",
     note: "UI 방향성만 제시되는 상태에서 구조를 제안합니다.",
+    jobDescription: "Create a clickable prototype that validates a new onboarding flow.",
+    criteria: [
+      "Figma proficiency",
+      "User-flow clarity",
+      "UX rationale",
+      "Speed of iteration",
+    ],
     sample: true,
   },
   {
@@ -63,6 +86,13 @@ export const sprints: Sprint[] = [
     tags: ["Data", "Retention"],
     summary: "유저 이탈 구간을 파악하고 개선 아이디어를 제안합니다.",
     note: "익명화된 로그 데이터를 활용합니다.",
+    jobDescription: "Analyze churn funnel data and recommend retention actions with evidence.",
+    criteria: [
+      "SQL or BI tooling",
+      "Structured analysis",
+      "Actionable recommendations",
+      "Presentation clarity",
+    ],
     sample: true,
   },
   {
@@ -76,6 +106,13 @@ export const sprints: Sprint[] = [
     tags: ["Operations", "Process"],
     summary: "자주 발생하는 요청을 구조화하고 대응 프로세스를 만듭니다.",
     note: "실제 상황 기반으로 템플릿을 설계합니다.",
+    jobDescription: "Build a customer support playbook and operational checklist for scaling.",
+    criteria: [
+      "Process documentation",
+      "Operational thinking",
+      "Clarity and completeness",
+      "Team collaboration",
+    ],
     sample: true,
   },
 ];

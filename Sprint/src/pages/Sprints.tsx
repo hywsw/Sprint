@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Filter } from "lucide-react";
 import SprintCard from "../components/SprintCard";
@@ -13,6 +13,8 @@ const rewardOptions = ["인턴십 인터뷰 패스트트랙", "유급 인턴십 
 
 export default function Sprints() {
   const reduceMotion = useReducedMotion();
+  const [searchParams] = useSearchParams();
+  const selectMode = searchParams.get("selectFor") === "resume";
   const [duration, setDuration] = useState<string | null>(null);
   const [category, setCategory] = useState<string | null>(null);
   const [skill, setSkill] = useState<string | null>(null);
@@ -41,6 +43,11 @@ export default function Sprints() {
         title="스프린트 탐색"
         subtitle="필터로 목표에 맞는 스프린트를 찾아보세요."
       >
+        {selectMode && (
+          <p className="mb-4 text-sm text-ink/60">
+            현재 등록된 스프린트
+          </p>
+        )}
         <div className="grid gap-6 lg:grid-cols-[1fr_3fr]">
           <div className="rounded-2xl border border-ink/10 bg-white/90 p-5">
             <div className="flex items-center gap-2 text-sm font-semibold text-ink">
@@ -77,7 +84,15 @@ export default function Sprints() {
 
           <div className="grid gap-6 md:grid-cols-2">
             {filtered.map((sprint) => (
-              <Link key={sprint.id} to={`/sprints/${sprint.id}`} className="block">
+              <Link
+                key={sprint.id}
+                to={
+                  selectMode
+                    ? `/resume-screener?sprintId=${sprint.id}`
+                    : `/sprints/${sprint.id}`
+                }
+                className="block"
+              >
                 <SprintCard sprint={sprint} />
               </Link>
             ))}
