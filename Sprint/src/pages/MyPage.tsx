@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Plus, Save, Trash2 } from "lucide-react";
+<<<<<<< HEAD
+=======
+import { sprints } from "../data/sprints";
+>>>>>>> aee7249 (Update screening flows and UI)
 
 type ProfileState = {
   name: string;
@@ -86,6 +90,36 @@ export default function MyPage() {
     [profile.resumeName]
   );
 
+<<<<<<< HEAD
+=======
+  const applications = useMemo(
+    () => [
+      {
+        id: "app-001",
+        sprintId: "ops-automation",
+        status: "On-going",
+        step: "이력서 + 코딩 테스트",
+        updatedAt: "2026-01-19",
+      },
+      {
+        id: "app-002",
+        sprintId: "growth-experiment",
+        status: "Completed",
+        step: "직무 테스트 결과 대기",
+        updatedAt: "2026-01-18",
+      },
+      {
+        id: "app-003",
+        sprintId: "prototype",
+        status: "Completed",
+        step: "최종 인터뷰 안내",
+        updatedAt: "2026-01-17",
+      },
+    ],
+    []
+  );
+
+>>>>>>> aee7249 (Update screening flows and UI)
   return (
     <motion.div
       initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
@@ -94,6 +128,7 @@ export default function MyPage() {
       transition={{ duration: reduceMotion ? 0 : 0.4 }}
       className="bg-mist"
     >
+<<<<<<< HEAD
       <div className="mx-auto max-w-3xl px-6 py-16">
         <div className="rounded-2xl border border-ink/10 bg-white/90 p-8 shadow-[0_25px_70px_-55px_rgba(10,15,31,0.5)]">
           <p className="text-xs uppercase tracking-[0.4em] text-ink/40">My Page</p>
@@ -102,6 +137,22 @@ export default function MyPage() {
 
           <div className="mt-8 space-y-10">
             <Section title="기본 정보">
+=======
+      <div className="mx-auto max-w-5xl px-6 py-16">
+        <div className="pl-2">
+          <p className="text-xs uppercase tracking-[0.4em] text-ink/40">My Page</p>
+          <h1 className="mt-3 text-2xl font-semibold text-ink">마이페이지</h1>
+          <p className="mt-2 text-sm text-ink/60">내 정보와 지원 현황을 관리하세요.</p>
+        </div>
+
+        <div className="mt-8 grid items-start gap-6 lg:grid-cols-[1.4fr_0.9fr]">
+          <div className="h-fit rounded-2xl border border-ink/10 bg-white/90 p-8 shadow-[0_25px_70px_-55px_rgba(10,15,31,0.5)]">
+            <h2 className="text-lg font-semibold text-ink">내 프로필</h2>
+            <p className="mt-2 text-sm text-ink/60">채용 담당자가 확인하는 정보입니다.</p>
+
+            <div className="mt-8 space-y-10">
+              <Section title="기본 정보">
+>>>>>>> aee7249 (Update screening flows and UI)
               <Field label="이름" value={profile.name} onChange={(v) => updateField("name", v)} />
               <Field
                 label="나이"
@@ -210,6 +261,7 @@ export default function MyPage() {
                 onChange={(value) => updateField("resumeName", value)}
               />
             </Section>
+<<<<<<< HEAD
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -222,6 +274,62 @@ export default function MyPage() {
               저장하기
             </button>
             {saved && <span className="text-xs text-ink/60">저장되었습니다.</span>}
+=======
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2 text-sm font-semibold text-ink shadow-glow transition hover:-translate-y-0.5 hover:bg-accentStrong"
+              >
+                <Save className="h-4 w-4" />
+                저장하기
+              </button>
+              {saved && <span className="text-xs text-ink/60">저장되었습니다.</span>}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-ink/10 bg-white/90 p-8 shadow-[0_25px_70px_-55px_rgba(10,15,31,0.5)]">
+            <h2 className="text-lg font-semibold text-ink">지원 현황</h2>
+            <p className="mt-2 text-sm text-ink/60">지원한 스프린트의 진행 상태를 확인하세요.</p>
+
+            <div className="mt-8 space-y-6">
+              {applications.map((application) => {
+                const sprint = sprints.find((item) => item.id === application.sprintId);
+                return (
+                  <div
+                    key={application.id}
+                    className="rounded-2xl border border-ink/10 bg-white px-4 py-4"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.25em] text-ink/40">
+                          {sprint?.company ?? "Unknown"}
+                        </p>
+                        <h3 className="mt-1 text-sm font-semibold text-ink">
+                          {sprint?.title ?? "스프린트"}
+                        </h3>
+                      </div>
+                      <span
+                        className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ${
+                          application.status === "Completed"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {application.status}
+                      </span>
+                    </div>
+                    <p className="mt-3 text-xs text-ink/60">{application.step}</p>
+                    <p className="mt-2 text-[11px] text-ink/40">
+                      최근 업데이트 · {application.updatedAt}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+>>>>>>> aee7249 (Update screening flows and UI)
           </div>
         </div>
       </div>

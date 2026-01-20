@@ -4,6 +4,7 @@ type RubricGridProps = {
 
 export default function RubricGrid({ items }: RubricGridProps) {
   return (
+<<<<<<< HEAD
     <div className="grid gap-4 md:grid-cols-5">
       {items.map((item) => (
         <div
@@ -12,6 +13,16 @@ export default function RubricGrid({ items }: RubricGridProps) {
         >
           {item}
         </div>
+=======
+    <div className="flex flex-wrap gap-2 text-xs">
+      {items.map((item) => (
+        <span
+          key={item}
+          className="rounded-full border border-ink/10 px-3 py-1 text-ink/70"
+        >
+          {item}
+        </span>
+>>>>>>> aee7249 (Update screening flows and UI)
       ))}
     </div>
   );

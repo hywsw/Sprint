@@ -57,15 +57,34 @@ export default function CompanyDashboard() {
                 </span>
               </div>
               <Link
+<<<<<<< HEAD
                 to={`/sprints/${sprint.id}`}
                 className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent"
               >
                 상세 보기
+=======
+                to={`/company/screening?sprintId=${sprint.id}`}
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
+              >
+                스크리닝 센터 들어가기
+>>>>>>> aee7249 (Update screening flows and UI)
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
           ))}
         </div>
+<<<<<<< HEAD
+=======
+
+        <div className="mt-10 rounded-2xl border border-ink/10 bg-white/90 p-6">
+          <p className="text-xs uppercase tracking-[0.3em] text-ink/40">Screening Center</p>
+          <h2 className="mt-2 text-lg font-semibold text-ink">스크리닝 센터란?</h2>
+          <p className="mt-2 text-sm text-ink/60">
+            이력서 자동 스크리닝과 코딩/직무 테스트 결과를 합산해 1차 평가와
+            랭킹을 생성하는 운영 대시보드입니다.
+          </p>
+        </div>
+>>>>>>> aee7249 (Update screening flows and UI)
       </div>
     </motion.div>
   );
