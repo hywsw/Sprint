@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Filter } from "lucide-react";
 import SprintCard from "../components/SprintCard";
 import Section from "../components/Section";
-import { sprints } from "../data/sprints";
+import { useSprints } from "../data/sprintStore";
 
 const durationOptions = ["7일", "10일", "2주"];
 const categoryOptions = ["Operations", "Data", "Growth", "Prototype", "Process"];
@@ -15,6 +15,7 @@ export default function Sprints() {
   const reduceMotion = useReducedMotion();
   const [searchParams] = useSearchParams();
   const selectMode = searchParams.get("selectFor") === "resume";
+  const sprints = useSprints();
   const [duration, setDuration] = useState<string | null>(null);
   const [category, setCategory] = useState<string | null>(null);
   const [skill, setSkill] = useState<string | null>(null);
@@ -28,7 +29,7 @@ export default function Sprints() {
       if (reward && sprint.reward !== reward) return false;
       return true;
     });
-  }, [duration, category, skill, reward]);
+  }, [duration, category, skill, reward, sprints]);
 
   return (
     <motion.div
