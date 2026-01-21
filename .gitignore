@@ -2,11 +2,8 @@
 resume_screening/.venv/
 external/resumescreener/service/.venv/
 resume_screening/resume_screening.log
-<<<<<<< HEAD
-=======
 resume_screening.log
 .DS_Store
->>>>>>> aee7249 (Update screening flows and UI)
 .env
 backend/.env
 backend/node_modules/
@@ -16,7 +13,10 @@ backend/.tsbuildinfo
 backend/.env.*
 backend/prisma/migrations/
 openlab/codex/
-<<<<<<< HEAD
-=======
 Sprint/node_modules/
->>>>>>> aee7249 (Update screening flows and UI)
+
+# Copilot Chat exports (local-only)
+copilot_chat_exports/
+
+# Scratch/debug
+.tmp_chat_inspect.txt
