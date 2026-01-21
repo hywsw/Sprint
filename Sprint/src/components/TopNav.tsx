@@ -17,6 +17,7 @@ export default function TopNav() {
       : [
           { label: "메인", to: "/home" },
           { label: "스프린트", to: "/sprints" },
+          { label: "지원하기", to: "/apply" },
           { label: "커뮤니티", to: "/community" },
           { label: "resume screening", to: "/resume-screener" },
         ];

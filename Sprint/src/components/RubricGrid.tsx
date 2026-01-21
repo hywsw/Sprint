@@ -4,14 +4,14 @@ type RubricGridProps = {
 
 export default function RubricGrid({ items }: RubricGridProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-5">
+    <div className="flex flex-wrap gap-2 text-xs">
       {items.map((item) => (
-        <div
+        <span
           key={item}
-          className="rounded-2xl border border-ink/10 bg-white/90 px-4 py-6 text-center text-sm font-semibold text-ink shadow-[0_25px_70px_-55px_rgba(10,15,31,0.5)]"
+          className="rounded-full border border-ink/10 px-3 py-1 text-ink/70"
         >
           {item}
-        </div>
+        </span>
       ))}
     </div>
   );

@@ -135,6 +135,15 @@ export default function CompanyDashboard() {
             </button>
           </div>
         </div>
+
+        <div className="mt-10 rounded-2xl border border-ink/10 bg-white/90 p-6">
+          <p className="text-xs uppercase tracking-[0.3em] text-ink/40">Screening Center</p>
+          <h2 className="mt-2 text-lg font-semibold text-ink">스크리닝 센터란?</h2>
+          <p className="mt-2 text-sm text-ink/60">
+            이력서 자동 스크리닝과 코딩/직무 테스트 결과를 합산해 1차 평가와
+            랭킹을 생성하는 운영 대시보드입니다.
+          </p>
+        </div>
       </div>
     </motion.div>
   );

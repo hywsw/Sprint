@@ -14,6 +14,7 @@ import Signup from "./pages/Signup";
 import Community from "./pages/Community";
 import ResumeScreener from "./pages/ResumeScreener";
 import MyPage from "./pages/MyPage";
+import ScreeningCenter from "./pages/ScreeningCenter";
 import RequireRole from "./components/RequireRole";
 import RequireAuth from "./components/RequireAuth";
 import TopNav from "./components/TopNav";
@@ -52,6 +53,14 @@ export default function App() {
             element={
               <RequireRole role="company">
                 <CompanyDashboard />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/company/screening"
+            element={
+              <RequireRole role="company">
+                <ScreeningCenter />
               </RequireRole>
             }
           />

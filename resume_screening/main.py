@@ -56,14 +56,7 @@ logger.info("Ollama Base URL: %s", OLLAMA_BASE_URL)
 logger.info("Ollama Model: %s", OLLAMA_MODEL)
 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_DIR = BASE_DIR.parent / "model"
 CONFIG_DIR = BASE_DIR / "config"
-
-
-def load_text_file(path: Path) -> str:
-    if not path.exists():
-        return ""
-    return path.read_text(encoding="utf-8", errors="ignore").strip()
 
 
 def build_job_description_from_config() -> str:
@@ -124,11 +117,8 @@ def build_criteria_from_config() -> str:
 
 
 def get_default_payload() -> Dict[str, str]:
-    model_job = load_text_file(MODEL_DIR / "job_description.txt")
-    model_criteria = load_text_file(MODEL_DIR / "criteria.txt")
-
-    job_description = model_job or build_job_description_from_config()
-    criteria = model_criteria or build_criteria_from_config()
+    job_description = build_job_description_from_config()
+    criteria = build_criteria_from_config()
 
     return {
         "job_description": job_description,
