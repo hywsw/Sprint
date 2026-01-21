@@ -97,3 +97,16 @@ Assistant response summary:
   - 스프린트 찾기 흐름: `/resume-screener`에서 “스프린트 찾기” 버튼 → `/sprints?selectFor=resume` → 스프린트 클릭 시 `/resume-screener?sprintId=...` 복귀 및 선택 반영.
   - `Sprint/src/pages/Sprints.tsx`에서 `selectFor=resume` 모드 지원(클릭 시 resume-screener로 이동).
   - 스프린트 찾기 버튼은 “Hiring Sprint” 라벨 아래, 선택 박스 밑으로 위치 조정 및 크기 축소.
+
+# 2026-01-20
+- Resume screening 안정화/모델 이슈: Ollama 모델 태그 불일치(예: llama3 vs llama3:latest)와 응답 지연으로 프론트에서 "서버 응답 없음" 발생. 백엔드에서 `/api/tags`로 모델명 자동 해석 및 `/health`에 requested_model/실사용 모델 반환하도록 보완. `OLLAMA_TIMEOUT_SEC` 환경변수 추가(기본 180s) 및 JD/criteria/resume 텍스트 길이 트리밍으로 지연 완화.
+- Qwen2.5 판단 오류 대응: 이력서에 MySQL 언급이 있는데 SQL 경험을 놓치는 케이스 분석. 프롬프트에 "MySQL/SQLite/PostgreSQL/...은 SQL 경험으로 간주" 문구 추가 + 후처리에서 SQL/DB 관련 기준의 false를 MySQL 키워드로 보정하는 override 추가.
+- 모델 기본값 변경: resume_screening `OLLAMA_MODEL` 기본을 `qwen2.5:7b-instruct`로 변경.
+- ResumeScreener UI: "스프린트 찾기"와 "파일 선택" 버튼을 동일한 베이스 클래스 + 사이즈 분리 방식으로 통일. 파일 선택은 라벨 버튼으로 교체하고, 선택된 파일명을 버튼 위로 표시. 파일 선택 버튼 크기 소폭 축소.
+- 인코딩 주의: ResumeScreener 파일 인코딩 깨짐 이슈가 있어 바이트 기반 수정 방식(ISO-8859-1 roundtrip)으로 변경 적용.
+
+# 2026-01-21
+- 로그인 UX 개선: 보호된 메뉴 접근 시 원래 경로(+query)로 돌아가도록 `RequireAuth/RequireRole`에서 `state.from`에 `location.search` 포함. 로그인 완료 후 `replace` 이동 + 로그인 상태에서 `/login` 접근 시 즉시 리다이렉트.
+- 로그인 초기 상태: 세션 단위로만 유지되도록 `localStorage` 대신 `sessionStorage` 사용하여 첫 접속 시 자동 로그인 방지.
+- Apply 템플릿 정렬: `Apply` 페이지를 `MyPage` 필드 구조(기본/학력/경력·역량/포트폴리오·이력서)로 통일, 마이페이지 저장값 불러오기 버튼 및 상태 메시지 추가.
+- 내비게이션 정리: 학생 메뉴에서 `/apply` 항목 제거(스프린트 상세 CTA로만 진입).

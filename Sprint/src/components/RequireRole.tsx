@@ -13,7 +13,8 @@ export default function RequireRole({
   const location = useLocation();
 
   if (!auth.isLoggedIn || auth.role !== role) {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+    const nextPath = `${location.pathname}${location.search}`;
+    return <Navigate to="/login" replace state={{ from: nextPath }} />;
   }
 
   return <>{children}</>;

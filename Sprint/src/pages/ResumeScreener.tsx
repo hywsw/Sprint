@@ -18,6 +18,10 @@ type ScreenerResult = {
 
 const API_BASE =
   (import.meta as any).env?.VITE_RESUME_SCREENER_URL || "http://localhost:8000";
+const actionPillBase =
+  "inline-flex items-center justify-center rounded-full bg-ink font-semibold text-white shadow-glow transition hover:-translate-y-0.5";
+const actionPillSm = "px-4 py-1.5 text-sm";
+const actionPillFile = "px-3 py-1.5 text-xs uppercase tracking-[0.15em]";
 
 export default function ResumeScreener() {
   const reduceMotion = useReducedMotion();
@@ -142,7 +146,7 @@ export default function ResumeScreener() {
                   ))}
                 </select>
                 <Link
-                  className="mt-3 inline-flex items-center justify-center rounded-full bg-ink px-4 py-1.5 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5"
+                  className={`mt-3 ${actionPillBase} ${actionPillSm}`}
                   to="/sprints?selectFor=resume"
                 >
                   스프린트 찾기
@@ -169,11 +173,21 @@ export default function ResumeScreener() {
                   Resume PDF
                 </label>
                 <div className="mt-3 rounded-2xl border border-dashed border-ink/20 bg-white px-4 py-6 text-sm text-ink/60">
+                  {resumeFile && (
+                    <p className="mb-3 text-xs text-ink/50">{resumeFile.name}</p>
+                  )}
+                  <label
+                    htmlFor="resume-file"
+                    className={`${actionPillBase} ${actionPillFile} cursor-pointer`}
+                  >
+                    파일 선택
+                  </label>
                   <input
+                    id="resume-file"
                     type="file"
                     accept="application/pdf"
                     onChange={(event) => setResumeFile(event.target.files?.[0] || null)}
-                    className="w-full text-sm text-ink/70 file:mr-4 file:rounded-full file:border-0 file:bg-ink file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.2em] file:text-white"
+                    className="sr-only"
                   />
                   <p className="mt-2 text-xs text-ink/40">
                     PDF 파일이 없다면 아래에 텍스트를 붙여넣어도 됩니다.

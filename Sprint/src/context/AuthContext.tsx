@@ -29,7 +29,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [auth, setAuth] = useState<AuthState>(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return defaultAuth;
     try {
       return JSON.parse(raw) as AuthState;
@@ -52,13 +52,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         name: account.name,
       };
       setAuth(nextAuth);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nextAuth));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(nextAuth));
       return true;
     };
 
     const logout = () => {
       setAuth(defaultAuth);
-      localStorage.removeItem(STORAGE_KEY);
+      sessionStorage.removeItem(STORAGE_KEY);
     };
 
     return { auth, login, logout, dummyAccounts };
