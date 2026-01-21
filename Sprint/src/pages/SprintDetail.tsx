@@ -3,12 +3,13 @@ import { Link, useParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, CalendarDays, ClipboardList, Sparkles, Users } from "lucide-react";
 import RubricGrid from "../components/RubricGrid";
-import { sprints } from "../data/sprints";
+import { useSprints } from "../data/sprintStore";
 
 export default function SprintDetail() {
   const reduceMotion = useReducedMotion();
   const { id } = useParams();
-  const sprint = useMemo(() => sprints.find((item) => item.id === id), [id]);
+  const sprints = useSprints();
+  const sprint = useMemo(() => sprints.find((item) => item.id === id), [id, sprints]);
 
   if (!sprint) {
     return (

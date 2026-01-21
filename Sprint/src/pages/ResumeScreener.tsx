@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { sprints } from "../data/sprints";
+import { useSprints } from "../data/sprintStore";
 
 type CriteriaDecision = {
   criteria: string;
@@ -25,6 +25,7 @@ const actionPillFile = "px-3 py-1.5 text-xs uppercase tracking-[0.15em]";
 
 export default function ResumeScreener() {
   const reduceMotion = useReducedMotion();
+  const sprints = useSprints();
   const [searchParams] = useSearchParams();
   const [selectedSprintId, setSelectedSprintId] = useState(
     sprints[0]?.id ?? ""
@@ -48,6 +49,13 @@ export default function ResumeScreener() {
       setSelectedSprintId(sprintId);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!sprints.length) return;
+    if (!sprints.some((item) => item.id === selectedSprintId)) {
+      setSelectedSprintId(sprints[0].id);
+    }
+  }, [sprints, selectedSprintId]);
   const jobDescription = selectedSprint?.jobDescription || "";
   const criteriaText = selectedSprint?.criteria?.join("\n") || "";
 

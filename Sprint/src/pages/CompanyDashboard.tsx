@@ -1,11 +1,45 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight, ClipboardCheck, FileStack, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import { sprints } from "../data/sprints";
+import { useAuth } from "../context/AuthContext";
+import type { SprintStatus } from "../data/sprintStore";
+import { getSprintMeta, useSprints } from "../data/sprintStore";
 
 export default function CompanyDashboard() {
   const reduceMotion = useReducedMotion();
+  const { auth } = useAuth();
+  const sprints = useSprints();
+  const pageSize = 6;
+  const sortedSprints = useMemo(
+    () =>
+      [...sprints].sort(
+        (a, b) => getSprintMeta(b).createdAt - getSprintMeta(a).createdAt
+      ),
+    [sprints]
+  );
+  const totalPages = Math.max(1, Math.ceil(sortedSprints.length / pageSize));
+  const [page, setPage] = useState(1);
+  const pageSprints = useMemo(
+    () => sortedSprints.slice((page - 1) * pageSize, page * pageSize),
+    [page, pageSize, sortedSprints]
+  );
+  const metaList = sprints.map((sprint) => getSprintMeta(sprint));
+  const inProgressCount = metaList.filter((meta) => meta.status !== "closed").length;
+  const doneCount = metaList.filter((meta) => meta.status === "closed").length;
+  const applicantTeams = metaList.reduce((sum, meta) => sum + meta.applicantTeams, 0);
+
+  const statusLabel = (status: SprintStatus) => {
+    if (status === "done") return "평가 완료";
+    if (status === "closed") return "종료";
+    if (status === "review") return "평가 진행 중";
+    return "진행 중";
+  };
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
 
   return (
     <motion.div
@@ -34,37 +68,72 @@ export default function CompanyDashboard() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-3">
-          <StatCard title="진행 중" value="3" icon={<FileStack className="h-5 w-5" />} />
-          <StatCard title="지원 팀" value="18" icon={<Users className="h-5 w-5" />} />
-          <StatCard title="평가 완료" value="7" icon={<ClipboardCheck className="h-5 w-5" />} />
+          <StatCard title="진행 중" value={`${inProgressCount}`} icon={<FileStack className="h-5 w-5" />} />
+          <StatCard title="지원 팀" value={`${applicantTeams}`} icon={<Users className="h-5 w-5" />} />
+          <StatCard title="종료" value={`${doneCount}`} icon={<ClipboardCheck className="h-5 w-5" />} />
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {sprints.slice(0, 4).map((sprint) => (
-            <div
-              key={sprint.id}
-              className="rounded-2xl border border-ink/10 bg-white/90 p-6"
-            >
-              <p className="text-xs uppercase tracking-[0.3em] text-ink/40">{sprint.company}</p>
-              <h3 className="mt-2 text-lg font-semibold text-ink">{sprint.title}</h3>
-              <p className="mt-3 text-sm text-ink/70">{sprint.summary}</p>
-              <div className="mt-4 flex flex-wrap gap-2 text-xs text-ink/60">
-                <span className="rounded-full border border-ink/10 px-3 py-1">
-                  지원 팀 6개
-                </span>
-                <span className="rounded-full border border-ink/10 px-3 py-1">
-                  평가 진행 중
-                </span>
-              </div>
-              <Link
-                to={`/sprints/${sprint.id}`}
-                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent"
+          {pageSprints.map((sprint) => {
+            const meta = getSprintMeta(sprint);
+            return (
+              <div
+                key={sprint.id}
+                className="rounded-2xl border border-ink/10 bg-white/90 p-6"
               >
-                상세 보기
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
-            </div>
-          ))}
+                <p className="text-xs uppercase tracking-[0.3em] text-ink/40">{sprint.company}</p>
+                <h3 className="mt-2 text-lg font-semibold text-ink">{sprint.title}</h3>
+                <p className="mt-3 text-sm text-ink/70">{sprint.summary}</p>
+                <div className="mt-4 flex flex-wrap gap-2 text-xs text-ink/60">
+                  <span className="rounded-full border border-ink/10 px-3 py-1">
+                    지원 팀 {meta.applicantTeams}개
+                  </span>
+                  <span className="rounded-full border border-ink/10 px-3 py-1">
+                    {statusLabel(meta.status)}
+                  </span>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <Link
+                    to={`/sprints/${sprint.id}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-accent"
+                  >
+                    상세 보기
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    to={`/company/create?edit=${sprint.id}`}
+                    className="rounded-full border border-ink/10 px-4 py-2 text-xs font-semibold text-ink/70"
+                  >
+                    수정
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-3 text-sm text-ink/60">
+          <span>
+            {page} / {totalPages} 페이지
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="rounded-full border border-ink/10 px-4 py-2 text-xs font-semibold text-ink/70 disabled:opacity-50"
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+            >
+              이전
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-ink/10 px-4 py-2 text-xs font-semibold text-ink/70 disabled:opacity-50"
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={page === totalPages}
+            >
+              다음
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
