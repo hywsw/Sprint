@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Plus, Save, Trash2 } from "lucide-react";
-<<<<<<< HEAD
-=======
 import { sprints } from "../data/sprints";
->>>>>>> aee7249 (Update screening flows and UI)
 
 type ProfileState = {
   name: string;
@@ -90,8 +87,6 @@ export default function MyPage() {
     [profile.resumeName]
   );
 
-<<<<<<< HEAD
-=======
   const applications = useMemo(
     () => [
       {
@@ -118,8 +113,6 @@ export default function MyPage() {
     ],
     []
   );
-
->>>>>>> aee7249 (Update screening flows and UI)
   return (
     <motion.div
       initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
@@ -128,16 +121,6 @@ export default function MyPage() {
       transition={{ duration: reduceMotion ? 0 : 0.4 }}
       className="bg-mist"
     >
-<<<<<<< HEAD
-      <div className="mx-auto max-w-3xl px-6 py-16">
-        <div className="rounded-2xl border border-ink/10 bg-white/90 p-8 shadow-[0_25px_70px_-55px_rgba(10,15,31,0.5)]">
-          <p className="text-xs uppercase tracking-[0.4em] text-ink/40">My Page</p>
-          <h1 className="mt-3 text-2xl font-semibold text-ink">마이페이지</h1>
-          <p className="mt-2 text-sm text-ink/60">내 정보와 지원 현황을 관리하세요.</p>
-
-          <div className="mt-8 space-y-10">
-            <Section title="기본 정보">
-=======
       <div className="mx-auto max-w-5xl px-6 py-16">
         <div className="pl-2">
           <p className="text-xs uppercase tracking-[0.4em] text-ink/40">My Page</p>
@@ -152,7 +135,6 @@ export default function MyPage() {
 
             <div className="mt-8 space-y-10">
               <Section title="기본 정보">
->>>>>>> aee7249 (Update screening flows and UI)
               <Field label="이름" value={profile.name} onChange={(v) => updateField("name", v)} />
               <Field
                 label="나이"
@@ -261,20 +243,6 @@ export default function MyPage() {
                 onChange={(value) => updateField("resumeName", value)}
               />
             </Section>
-<<<<<<< HEAD
-          </div>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={handleSave}
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2 text-sm font-semibold text-ink shadow-glow transition hover:-translate-y-0.5 hover:bg-accentStrong"
-            >
-              <Save className="h-4 w-4" />
-              저장하기
-            </button>
-            {saved && <span className="text-xs text-ink/60">저장되었습니다.</span>}
-=======
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -329,7 +297,6 @@ export default function MyPage() {
                 );
               })}
             </div>
->>>>>>> aee7249 (Update screening flows and UI)
           </div>
         </div>
       </div>
