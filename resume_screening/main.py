@@ -48,7 +48,9 @@ app.add_middleware(
 
 # Ollama
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:7b-instruct")
+OLLAMA_TIMEOUT_SEC = int(os.getenv("OLLAMA_TIMEOUT_SEC", "180"))
+RESOLVED_OLLAMA_MODEL: Optional[str] = None
 
 logger.info("Ollama Base URL: %s", OLLAMA_BASE_URL)
 logger.info("Ollama Model: %s", OLLAMA_MODEL)
@@ -156,20 +158,57 @@ def extract_text_from_pdf(file_content: bytes) -> str:
         return ""
 
 
+def resolve_ollama_model() -> str:
+    """Resolve the model name against Ollama tags if needed."""
+    global RESOLVED_OLLAMA_MODEL
+    if RESOLVED_OLLAMA_MODEL:
+        return RESOLVED_OLLAMA_MODEL
+
+    try:
+        resp = requests.get(f"{OLLAMA_BASE_URL}/api/tags", timeout=5)
+        if resp.status_code == 200:
+            tags = resp.json().get("models", [])
+            names = [item.get("name") for item in tags if item.get("name")]
+
+            if OLLAMA_MODEL in names:
+                RESOLVED_OLLAMA_MODEL = OLLAMA_MODEL
+                return RESOLVED_OLLAMA_MODEL
+
+            with_latest = f"{OLLAMA_MODEL}:latest"
+            if with_latest in names:
+                RESOLVED_OLLAMA_MODEL = with_latest
+                return RESOLVED_OLLAMA_MODEL
+
+            for name in names:
+                if name.split(":")[0] == OLLAMA_MODEL:
+                    RESOLVED_OLLAMA_MODEL = name
+                    return RESOLVED_OLLAMA_MODEL
+
+            if names:
+                RESOLVED_OLLAMA_MODEL = names[0]
+                return RESOLVED_OLLAMA_MODEL
+    except Exception as exc:
+        logger.warning("Ollama tags lookup failed: %s", str(exc))
+
+    RESOLVED_OLLAMA_MODEL = OLLAMA_MODEL
+    return RESOLVED_OLLAMA_MODEL
+
+
 def call_ollama(
-    prompt: str, model: str = OLLAMA_MODEL, temperature: float = 0.3
+    prompt: str, model: Optional[str] = None, temperature: float = 0.3
 ) -> Optional[str]:
     """Call the Ollama generate endpoint."""
     try:
         url = f"{OLLAMA_BASE_URL}/api/generate"
+        target_model = model or resolve_ollama_model()
         payload = {
-            "model": model,
+            "model": target_model,
             "prompt": prompt,
             "stream": False,
             "temperature": temperature,
         }
 
-        response = requests.post(url, json=payload, timeout=60)
+        response = requests.post(url, json=payload, timeout=OLLAMA_TIMEOUT_SEC)
 
         if response.status_code == 200:
             result = response.json()
@@ -200,6 +239,43 @@ def parse_llm_response(response_text: str) -> Dict:
     except json.JSONDecodeError as exc:
         logger.error("JSON parse failed: %s", str(exc))
         return {}
+
+
+def detect_sql_keywords(resume_text: str) -> List[str]:
+    if not resume_text:
+        return []
+    lower = resume_text.lower()
+    keywords = [
+        "mysql",
+        "postgresql",
+        "postgres",
+        "sqlite",
+        "mariadb",
+        "oracle",
+        "mssql",
+        "sql server",
+    ]
+    found = [key for key in keywords if key in lower]
+    return found
+
+
+def apply_sql_override(parsed: Dict, resume_text: str) -> None:
+    sql_hits = detect_sql_keywords(resume_text)
+    if not sql_hits:
+        return
+    decisions = parsed.get("criteria_decisions")
+    if not isinstance(decisions, list):
+        return
+    for item in decisions:
+        if not isinstance(item, dict):
+            continue
+        criterion = str(item.get("criteria", "")).lower()
+        if "sql" in criterion or "database" in criterion or "데이터베이스" in criterion:
+            if item.get("decision") is False:
+                item["decision"] = True
+                note = f"이력서에 {', '.join(sql_hits)} 경험 언급"
+                existing = item.get("reasoning") or ""
+                item["reasoning"] = f"{existing} ({note})".strip()
 
 
 def fallback_screening(resume_text: str, criteria: str, reason: str) -> Dict:
@@ -270,16 +346,21 @@ def screen_resume_with_ollama(
             "criteria_decisions": [],
         }
 
+    trimmed_resume = trim_text(resume_text, 6000)
+    trimmed_job = trim_text(job_description, 2000)
+    trimmed_criteria = trim_text(criteria, 2000)
+
     prompt = f"""아래 이력서를 채용 공고와 평가 기준으로 평가하고 JSON 형식으로 답해주세요.
+참고: MySQL/PostgreSQL/SQLite/MariaDB/SQL Server/Oracle 경험은 SQL 경험으로 간주하세요.
 
 채용 공고:
-{job_description}
+{trimmed_job}
 
 평가 기준:
-{criteria}
+{trimmed_criteria}
 
 이력서:
-{resume_text}
+{trimmed_resume}
 
 반드시 아래 JSON 형식으로만 답변하세요:
 {{
@@ -292,7 +373,7 @@ def screen_resume_with_ollama(
 
 각 기준은 true/false 판단과 1~2줄 사유를 포함하세요."""
 
-    response = call_ollama(prompt, OLLAMA_MODEL)
+    response = call_ollama(prompt)
     if not response:
         return {
             "success": False,
@@ -304,6 +385,7 @@ def screen_resume_with_ollama(
 
     parsed = parse_llm_response(response)
     if parsed:
+        apply_sql_override(parsed, resume_text)
         parsed["success"] = True
         return parsed
 
@@ -313,7 +395,11 @@ def screen_resume_with_ollama(
 
 @app.get("/health")
 def health_check():
-    return {"status": "ok", "model": OLLAMA_MODEL}
+    return {
+        "status": "ok",
+        "model": resolve_ollama_model(),
+        "requested_model": OLLAMA_MODEL,
+    }
 
 
 @app.get("/defaults")

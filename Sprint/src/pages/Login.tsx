@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 
@@ -9,10 +9,14 @@ export default function Login() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { login, dummyAccounts } = useAuth();
+  const { auth, login, dummyAccounts } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: string } | null)?.from ?? "/home";
+
+  if (auth.isLoggedIn) {
+    return <Navigate to={from} replace />;
+  }
 
   return (
     <motion.div
@@ -75,7 +79,7 @@ export default function Login() {
                 return;
               }
               setError("");
-              navigate(from);
+              navigate(from, { replace: true });
             }}
           >
             로그인
