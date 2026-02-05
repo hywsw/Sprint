@@ -92,8 +92,7 @@ export default function Home() {
               실무 과제로 검증하는 채용, Hiring Sprint
             </h1>
             <p className="mt-6 max-w-2xl text-base text-slate md:text-lg">
-              지원자는 짧게 몰입해 결과로 증명하고, 기업은 채용 리스크 없이 검증된
-              인재와 결과물을 받습니다.
+              결과로 증명하는 채용의 시작
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <CTAButton to="/company/create">Hiring Sprint 시작하기</CTAButton>
